@@ -21,9 +21,7 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   assembler: Assembler = new Assembler();
 
   startAssembler(): void {
-    alert(1);
     if (this.resourceTransferer && this.recipe) {
-      alert(2);
       this.assembler.start(this.recipe, this.resourceTransferer);
     }
   }

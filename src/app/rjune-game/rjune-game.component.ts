@@ -20,8 +20,7 @@ export class ResourceTransferManager {
     for (let requiredResource of recipe.requiredResources) {
       const resourceRequirement = requiredResource.count;
       const availableResources =
-        this.resourceContainer[requiredResource.resourceType];
-      console.log({ availableResources, resourceRequirement });
+        this.resourceContainer[requiredResource.resourceType].count;
       if (availableResources < resourceRequirement) {
         return false;
       }
