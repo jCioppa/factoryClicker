@@ -1,8 +1,7 @@
-import { ResourceType } from 'src/rjune/ResourceType';
+import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { Recipe } from './Recipe';
 import { RecipeMap } from './data/RecipeMap';
-import { ReceipeResult } from './RecipeResult';
-import { ResourceTransferManager } from 'src/app/rjune-game/rjune-game.component';
+import { ResourceTransferManager } from './ResourceTransferManager';
 
 export class Assembler {
   recipe?: Recipe;

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from 'src/rjune/Recipe';
-import { ReceipeResult } from 'src/rjune/RecipeResult';
-import { RequiredResourceInfo } from 'src/rjune/RequiredResourceInfo';
-import { ResourceType } from '../../rjune/ResourceType';
+import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ResourceType } from '../../factoryClicker/ResourceType';
 
 // these are options in the recipe dropdown, and isn't used outside this class
 interface RecipeOptionInfo {
@@ -10,49 +8,12 @@ interface RecipeOptionInfo {
   name: string;
 }
 
-export class ResourceTransferManager {
-  public resourceContainer: any;
-
-  constructor(resourceContainer: any) {
-    this.resourceContainer = resourceContainer;
-  }
-
-  satisfiesRecipe(recipe: Recipe): boolean {
-    for (let requiredResource of recipe.requiredResources) {
-      const resourceRequirement = requiredResource.count;
-      const availableResources =
-        this.resourceContainer[requiredResource.resourceType].count;
-      if (availableResources < resourceRequirement) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  transferResources(recipe: Recipe): Array<RequiredResourceInfo> {
-    let resources: Array<RequiredResourceInfo> = [];
-
-    for (let requiredResource of recipe.requiredResources) {
-      const resourceRequirement = requiredResource.count;
-      this.resourceContainer[requiredResource.resourceType].count -=
-        resourceRequirement;
-      resources.push({ ...requiredResource });
-    }
-
-    return resources;
-  }
-
-  returnResources(result: ReceipeResult) {
-    this.resourceContainer[result.resourceType].count += result.count;
-  }
-}
-
 @Component({
-  selector: 'RjuneGame',
-  templateUrl: './rjune-game.component.html',
-  styleUrls: ['./rjune-game.component.sass'],
+  selector: 'Main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.sass'],
 })
-export class RjuneGameComponent implements OnInit {
+export class MainComponent implements OnInit {
   public clickCount: number = 0;
   public expToNextLevel: number = 25;
   public currentLevel: number = 0;

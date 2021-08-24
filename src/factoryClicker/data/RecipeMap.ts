@@ -1,4 +1,4 @@
-import { ResourceType } from 'src/rjune/ResourceType';
+import { ResourceType } from 'src/factoryClicker/ResourceType';
 
 export const RecipeMap: any = {
   [ResourceType.Iron]: {
