@@ -52,11 +52,19 @@
         </div>
     </div>
 
+    <div>
+        <h2> Smelters </h2>       
+    </div>
+
    <div>
-       <h2> Assembler(s) </h2>
+       <h2> Assembler </h2>
        <select [(ngModel)]="this.currentOption">
            <option *ngFor="let recipeOption of recipeOptions" [value]="recipeOption.value">{{recipeOption.name}}</option>
        </select>
        <app-assembler [recipe]="this.currentOption" [resourceTransferer] = "this.resourceTransferer"></app-assembler>
    </div>
+
+   <div>
+    <h2> Science </h2>       
+</div>
 </div>
