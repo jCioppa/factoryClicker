@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Assembler } from 'src/rjune/Assembler';
+import { Recipe } from 'src/rjune/Recipe';
 import { ResourceType } from '../../rjune/ResourceType';
 import { ResourceTransferManager } from '../rjune-game/rjune-game.component';
 
@@ -20,7 +21,9 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   assembler: Assembler = new Assembler();
 
   startAssembler(): void {
-    if (this.recipe && this.resourceTransferer) {
+    alert(1);
+    if (this.resourceTransferer && this.recipe) {
+      alert(2);
       this.assembler.start(this.recipe, this.resourceTransferer);
     }
   }

@@ -17,10 +17,11 @@ export class ResourceTransferManager {
   }
 
   satisfiesRecipe(recipe: Recipe): boolean {
-    for (let requiredResource of recipe.requiredResource) {
+    for (let requiredResource of recipe.requiredResources) {
       const resourceRequirement = requiredResource.count;
       const availableResources =
         this.resourceContainer[requiredResource.resourceType];
+      console.log({ availableResources, resourceRequirement });
       if (availableResources < resourceRequirement) {
         return false;
       }
@@ -31,9 +32,9 @@ export class ResourceTransferManager {
   transferResources(recipe: Recipe): Array<RequiredResourceInfo> {
     let resources: Array<RequiredResourceInfo> = [];
 
-    for (let requiredResource of recipe.requiredResource) {
+    for (let requiredResource of recipe.requiredResources) {
       const resourceRequirement = requiredResource.count;
-      this.resourceContainer[requiredResource.resourceType] -=
+      this.resourceContainer[requiredResource.resourceType].count -=
         resourceRequirement;
       resources.push({ ...requiredResource });
     }

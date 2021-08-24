@@ -20,8 +20,9 @@ export class Assembler {
 
     if (recipe !== ResourceType.None) {
       const newRecipe = RecipeMap[recipe];
-
+      console.log(newRecipe);
       if (resourceTransferer.satisfiesRecipe(newRecipe)) {
+        console.log(1);
         const requiredResources =
           resourceTransferer.transferResources(newRecipe);
         this.recipe = newRecipe;
