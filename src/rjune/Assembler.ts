@@ -37,6 +37,7 @@ export class Assembler {
     if (this.progressHandle !== null) {
       clearInterval(this.progressHandle);
       this.progressHandle = null;
+      this.progress = 0;
     }
   }
 
@@ -48,6 +49,7 @@ export class Assembler {
     if (this.recipe) {
       this.progress++;
       if (this.progress >= this.recipe.duration) {
+        this.stop()
         return this.recipe.output;
       }
     }

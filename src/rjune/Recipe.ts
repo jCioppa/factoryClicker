@@ -6,5 +6,5 @@ export interface Recipe {
   name: string;
   duration: number;
   output: ReceipeResult;
-  requiredResource: Array<RequiredResourceInfo>;
+  requiredResources: Array<RequiredResourceInfo>;
 }

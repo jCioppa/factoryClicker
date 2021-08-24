@@ -25,6 +25,10 @@ export class AssemblerComponent implements OnInit, OnDestroy {
     }
   }
 
+  stopAssembler(): void {
+    this.assembler.stop();
+  }
+
   ngOnChanges(changes: SimpleChanges) {}
 
   ngOnDestroy(): void {}
