@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from 'src/rjune/Recipe';
+import { ReceipeResult } from 'src/rjune/RecipeResult';
 import { RequiredResourceInfo } from 'src/rjune/RequiredResourceInfo';
 import { ResourceType } from '../../rjune/ResourceType';
 
@@ -39,6 +40,10 @@ export class ResourceTransferManager {
     }
 
     return resources;
+  }
+
+  returnResources(result: ReceipeResult) {
+    this.resourceContainer[result.resourceType].count += result.count;
   }
 }
 

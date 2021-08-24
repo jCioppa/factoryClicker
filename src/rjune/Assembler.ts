@@ -25,7 +25,7 @@ export class Assembler {
           resourceTransferer.transferResources(newRecipe);
         this.recipe = newRecipe;
         this.progressHandle = setInterval(
-          () => this.tick(),
+          () => this.tick(resourceTransferer),
           newRecipe.duration
         );
       }
@@ -35,6 +35,7 @@ export class Assembler {
   stop() {
     if (this.progressHandle !== null) {
       clearInterval(this.progressHandle);
+      this.progress = 0;
       this.progressHandle = null;
     }
   }
@@ -43,13 +44,14 @@ export class Assembler {
     return !(this.progressHandle === null);
   }
 
-  tick(): ReceipeResult | null {
+  tick(resourceTransferer: ResourceTransferManager): void {
     if (this.recipe) {
       this.progress++;
       if (this.progress >= this.recipe.duration) {
-        return this.recipe.output;
+        this.stop();
+        const result = this.recipe.output;
+        resourceTransferer.returnResources(result);
       }
     }
-    return null;
   }
 }

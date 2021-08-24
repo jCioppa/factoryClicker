@@ -8,9 +8,11 @@ import { AppService } from './app.service';
 import { LoggerComponent } from './logger/logger.component';
 import { RjuneGameComponent } from './rjune-game/rjune-game.component';
 import { AssemblerComponent } from './assembler/assembler.component';
+import { SmelterComponent } from './smelter/smelter.component';
+import { ScienceLabComponent } from './science-lab/science-lab.component';
 
 @NgModule({
-  declarations: [AppComponent, LoggerComponent, RjuneGameComponent, AssemblerComponent],
+  declarations: [AppComponent, LoggerComponent, RjuneGameComponent, AssemblerComponent, SmelterComponent, ScienceLabComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [AppService],
   bootstrap: [AppComponent],
