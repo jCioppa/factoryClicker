@@ -1,0 +1,2 @@
+# factoryClicker
+test angular app 
