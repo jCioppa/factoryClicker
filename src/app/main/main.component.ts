@@ -63,6 +63,10 @@ export class MainComponent implements OnInit {
 
   onSelectionChanged() {}
 
+  test(event: any) {
+    alert(JSON.stringify(event));
+  }
+
   onClickResource(resourceType: ResourceType) {
     if (this.processResources(resourceType)) {
       this.clickCount += this.increment;
