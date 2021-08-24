@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RjuneGameComponent } from './rjune-game.component';
+import { ScienceLabComponent } from './science-lab.component';
 
-describe('RjuneGameComponent', () => {
-  let component: RjuneGameComponent;
-  let fixture: ComponentFixture<RjuneGameComponent>;
+describe('ScienceLabComponent', () => {
+  let component: ScienceLabComponent;
+  let fixture: ComponentFixture<ScienceLabComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RjuneGameComponent ]
+      declarations: [ ScienceLabComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RjuneGameComponent);
+    fixture = TestBed.createComponent(ScienceLabComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

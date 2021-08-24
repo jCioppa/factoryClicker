@@ -5,10 +5,9 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { Assembler } from 'src/rjune/Assembler';
-import { Recipe } from 'src/rjune/Recipe';
-import { ResourceType } from '../../rjune/ResourceType';
-import { ResourceTransferManager } from '../rjune-game/rjune-game.component';
+import { Assembler } from 'src/factoryClicker/Assembler';
+import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ResourceType } from '../../factoryClicker/ResourceType';
 
 @Component({
   selector: 'app-assembler',
