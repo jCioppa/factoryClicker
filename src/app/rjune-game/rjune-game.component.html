@@ -1,0 +1,62 @@
+<style>
+    .progress_bar { 
+        width: 100%;
+        height: 20px;
+    }
+    .resource-container { 
+        margin: 10px;
+    }
+</style>
+
+<div class = "rjune-root">
+    
+    <p>Clicks: {{this.clickCount}}</p>
+    <p>Level: {{this.currentLevel}}</p>
+    <p>Increment: {{this.increment}}</p>
+
+    <div class = "progress_bar">
+        <progress [max]="this.expToNextLevel" [value]="clickCount"> </progress>
+    </div>
+
+    <div>
+
+        <h2>Resources</h2>
+
+        <div class = "resource-container">
+            <button (click) = "onClickResource(resource.Iron)"> Iron</button>
+            <span> {{this.resources[resource.Iron].count}} </span>
+        </div>
+       
+        <div class = "resource-container">
+            <button (click) = "onClickResource(resource.Copper)"> Copper</button>
+            <span> {{this.resources[resource.Copper].count}} </span>
+    
+        </div>
+       
+        <div class = "resource-container">
+            <button (click) = "onClickResource(resource.Coal)"> Coal</button>
+            <span> {{this.resources[resource.Coal].count}} </span>
+        </div>
+
+    </div>
+
+    <div>      
+        <div class = "resource-container">
+            <button (click) = "onClickResource(resource.IronGear)">Iron Gear</button>
+            <span> {{this.resources[resource.IronGear].count}} </span>
+        </div>
+        
+        <div class = "resource-container">
+            <button (click) = "onClickResource(resource.CopperWire)">Copper Wire</button>
+            <span> {{this.resources[resource.CopperWire].count}} </span>
+        </div>
+    </div>
+
+   <div>
+       <h2> Assembler(s) </h2>
+       <select [(ngModel)]="this.currentOption">
+           <option *ngFor="let recipeOption of recipeOptions" [value]="recipeOption.value">{{recipeOption.name}}</option>
+       </select>
+       <app-assembler [recipe]="this.currentOption" [resourceTransferer] = "this.resourceTransferer"></app-assembler>
+   </div>
+</div>

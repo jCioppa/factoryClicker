@@ -1,0 +1,6 @@
+<span></span>
+<div *ngIf = "this.assembler && this.assembler.recipe">
+    <p>Progress: {{this.assembler.progress}}</p>
+    <progress [max]="this.assembler.recipe.duration" [value]="this.assembler.progress"> </progress>
+    <button (click)="startAssembler()">Start</button>
+</div>
