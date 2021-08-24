@@ -1,8 +1,9 @@
 <div *ngIf = "assembler">
     <button (click)="startAssembler()">Start</button>
+    <button (click)="stopAssembler()">Stop</button>
     <div *ngIf = "assembler.recipe">
         <p>Progress: {{assembler.progress}}</p>
         <progress [max]="assembler.recipe.duration" [value]="assembler.progress"> </progress>
     </div>
-    <button (click)="startAssembler()">Start</button>
+    
 </div>
