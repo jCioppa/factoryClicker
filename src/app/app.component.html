@@ -1,4 +1,8 @@
 <style>
+
+  .root-wrapper { 
+    background: #c4c0be;
+  }
   .content { 
     width: 70%;
     margin: 0 auto;
@@ -7,7 +11,10 @@
   }
 </style>
 
-<div class = "content">
-  <h1> {{ title }} </h1>
-  <router-outlet></router-outlet>
+<div class = "root-wrapper">
+  <div class = "content">
+    <h1> {{ title }} </h1>
+    <router-outlet></router-outlet>
+    <app-logger></app-logger>
+  </div>
 </div>

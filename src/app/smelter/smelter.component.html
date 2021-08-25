@@ -1,1 +1,10 @@
-<p>smelter works!</p>
+<div class = "smelter-component">
+    <select [(ngModel)]="selectedResourceType">
+        <option *ngFor="let o of dropdownOptions" [value] = "o.resourceType">{{o.displayName}}</option>
+    </select>
+    
+    <p>Progress: {{smelter.progress}}</p>
+    <progress [max]="smelter.duration" [value]="smelter.progress"> </progress>
+    <button (click)="startSmelter()">Start</button>
+</div>
+

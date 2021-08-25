@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { AppRoutingModule } from './app-routing.module';
 import { declarations } from './app.declarations';
 import { imports } from './app.imports'
-import { providers } from './app.providers'
+import { providers } from './app.providers';
+import { MinerComponent } from './miner/miner.component'
 
 @NgModule({
-  declarations: [...declarations, AppComponent],
+  declarations: [...declarations, AppComponent, MinerComponent],
   imports : [...imports, AppRoutingModule],
   providers: [...providers, AppService],
   bootstrap: [AppComponent],

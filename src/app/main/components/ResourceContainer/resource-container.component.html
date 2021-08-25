@@ -1,4 +1,19 @@
+<style>
+    .resource-container { 
+        padding: 1rem;
+        border: 1px solid red;
+        margin-bottom: 2px;
+    }
+    .resource-title { 
+        margin-right: 2px;
+        display: inline-block;
+        border: 1px solid blue;
+        padding: 0.25rem;
+        width: 150px;
+    }
+</style>
+
 <div class = "resource-container">
-    <button (click) = "onClickResource()"> {{displayName}}</button>
-    <span> {{resourceSource.count}} </span>
+    <span class = 'resource-title'>{{displayName}}: {{resourceSource.count}}</span>
+    <button (click) = "onClickResource()">+</button>
 </div>

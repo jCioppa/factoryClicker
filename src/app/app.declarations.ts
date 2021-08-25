@@ -5,12 +5,11 @@ import { SmelterComponent } from './smelter/smelter.component';
 import { ScienceLabComponent } from './science-lab/science-lab.component';
 import { ResourceContainerComponent } from './main/components/ResourceContainer/resource-container.component';
 
-
 export const declarations = [
   LoggerComponent,
   MainComponent,
   AssemblerComponent,
   SmelterComponent,
   ScienceLabComponent,
-  ResourceContainerComponent
+  ResourceContainerComponent,
 ];

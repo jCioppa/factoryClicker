@@ -8,6 +8,7 @@ import {
 import { Assembler } from 'src/factoryClicker/Assembler';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
+import { LoggerService } from '../logger/logger.service';
 
 @Component({
   selector: 'Assembler',
@@ -15,13 +16,20 @@ import { ResourceType } from '../../factoryClicker/ResourceType';
   styleUrls: ['./assembler.component.sass'],
 })
 export class AssemblerComponent implements OnInit, OnDestroy {
-  @Input() recipe?: ResourceType;
+  @Input() resourceType?: ResourceType;
   @Input() resourceTransferer?: ResourceTransferManager;
   assembler: Assembler = new Assembler();
 
+  constructor(private logger: LoggerService) {}
+
   startAssembler(): void {
-    if (this.resourceTransferer && this.recipe) {
-      this.assembler.start(this.recipe, this.resourceTransferer);
+    if (this.resourceTransferer && this.resourceType) {
+      this.logger.log(
+        'AssemblerComponent',
+        'startAssembler',
+        'starting assembler'
+      );
+      this.assembler.start(this.resourceType, this.resourceTransferer);
     }
   }
 
