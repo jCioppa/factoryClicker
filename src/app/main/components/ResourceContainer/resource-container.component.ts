@@ -7,15 +7,16 @@ import { ResourceType } from 'src/factoryClicker/ResourceType';
   styleUrls: ['./resource-container.component.sass'],
 })
 export class ResourceContainerComponent implements OnInit {
-  @Input() public resourceType?: ResourceType;
-  @Input() public resourceSource: any;
-  @Input() public displayName?: string;
 
-  @Output() clickSignal = new EventEmitter<ResourceType>();
+  @Input() public resourceType?: ResourceType;
+  @Input() public displayName?: string;
+  @Input() public resourceSource?: any;
+
+  @Output() onClick = new EventEmitter<ResourceType>();
 
   ngOnInit(): void {}
 
   onClickResource(): void {
-    this.clickSignal.emit(this.resourceType);
+    this.onClick.emit(this.resourceType);
   }
 }

@@ -19,62 +19,36 @@
     </div>
 
     <mat-tab-group>
-        <mat-tab label="Resources">
-            <div>
 
-                <ResourceContainer 
-                    (clickSignal) = "test($event)"
-                    [resourceType]="resource.Iron"   
-                    [resourceSource]="this.resources[resource.Iron]"
-                    displayName="Iron"
+        <mat-tab label="Resources">
+                <ResourceContainer *ngFor="let resourceContainer in resourceContainers"
+                    (onClick) = "onClickResource($event)"
+                    [resourceType] = "resourceContainer.resourceType"
+                    [displayName] = "resourceContainer.displayName"
+                    [resourceSource] = "resources[resourceContainer.resourceType]"
                 ></ResourceContainer>
-                
-            
-                <div class = "resource-container">
-                    <button (click) = "onClickResource(resource.Iron)"> Iron</button>
-                    <span> {{this.resources[resource.Iron].count}} </span>
-                </div>
-               
-                <div class = "resource-container">
-                    <button (click) = "onClickResource(resource.Copper)"> Copper</button>
-                    <span> {{this.resources[resource.Copper].count}} </span>
-            
-                </div>
-               
-                <div class = "resource-container">
-                    <button (click) = "onClickResource(resource.Coal)"> Coal</button>
-                    <span> {{this.resources[resource.Coal].count}} </span>
-                </div>
-        
-            </div>
-        
-            <div>      
-                <div class = "resource-container">
-                    <button (click) = "onClickResource(resource.IronGear)">Iron Gear</button>
-                    <span> {{this.resources[resource.IronGear].count}} </span>
-                </div>
-                
-                <div class = "resource-container">
-                    <button (click) = "onClickResource(resource.CopperWire)">Copper Wire</button>
-                    <span> {{this.resources[resource.CopperWire].count}} </span>
-                </div>
-            </div>    
         </mat-tab>
+        
         <mat-tab label="Miners">  </mat-tab>
+      
         <mat-tab label="Assemblers"> 
-            <div>
+            <div>     
                 <select [(ngModel)]="this.currentOption">
-                    <option *ngFor="let recipeOption of recipeOptions" [value]="recipeOption.value">{{recipeOption.name}}</option>
+                    <option *ngFor="let recipeOption of recipeOptions" 
+                        [value]="recipeOption.value">
+                            {{recipeOption.name}}
+                    </option>
                 </select>
-                <app-assembler [recipe]="this.currentOption" [resourceTransferer] = "this.resourceTransferer"></app-assembler>
+                
+                <Assembler 
+                    [recipe]="this.currentOption" 
+                    [resourceTransferer] = "this.resourceTransferer"
+                ></Assembler>
             </div>
              
         </mat-tab>
-        <mat-tab label="Smelters"> </mat-tab>
-        <mat-tab label="Science">  </mat-tab>
-
+        <mat-tab label="Smelters"></mat-tab>
+        <mat-tab label="Science"></mat-tab>
 
     </mat-tab-group>
-
-
 </div>

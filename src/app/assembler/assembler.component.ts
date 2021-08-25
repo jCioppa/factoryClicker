@@ -10,7 +10,7 @@ import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferMana
 import { ResourceType } from '../../factoryClicker/ResourceType';
 
 @Component({
-  selector: 'app-assembler',
+  selector: 'Assembler',
   templateUrl: './assembler.component.html',
   styleUrls: ['./assembler.component.sass'],
 })
