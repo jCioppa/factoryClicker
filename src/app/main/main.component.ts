@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RecipeMap } from 'src/factoryClicker/data/RecipeMap';
+import { Recipe } from 'src/factoryClicker/Recipe';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
 
@@ -13,7 +15,9 @@ interface RecipeOptionInfo {
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.sass'],
 })
+
 export class MainComponent implements OnInit {
+
   public clickCount: number = 0;
   public expToNextLevel: number = 25;
   public currentLevel: number = 0;
@@ -39,8 +43,7 @@ export class MainComponent implements OnInit {
     },
   };
 
-  public resourceTransferer: ResourceTransferManager =
-    new ResourceTransferManager(this.resources);
+  public resourceTransferer: ResourceTransferManager = new ResourceTransferManager(this.resources);
 
   public recipeOptions: Array<RecipeOptionInfo> = [
     {
@@ -59,45 +62,50 @@ export class MainComponent implements OnInit {
     },
   ];
 
+  public resourceContainers: Array<any> = [
+    {
+      displayName: "Iron",
+      resourceType: ResourceType.Iron
+    }
+  ]
+  
   ngOnInit(): void {}
 
   onSelectionChanged() {}
 
   onClickResource(resourceType: ResourceType) {
-    if (this.processResources(resourceType)) {
-      this.clickCount += this.increment;
-      if (this.clickCount >= this.expToNextLevel) {
-        this.currentLevel++;
-        this.clickCount = 0;
-        this.expToNextLevel *= 2.0;
+    const recipe: Recipe = RecipeMap[resourceType];
+    if (recipe) { 
+      if (this.canSatisfyRecipe(recipe)) { 
+        this.processResources(recipe);
+        this.clickCount += this.increment;
+        if (this.clickCount >= this.expToNextLevel) {
+          this.currentLevel++;
+          this.clickCount = 0;
+          this.expToNextLevel *= 2.0;         
+        }
       }
     }
   }
 
-  processResources(resourceType: ResourceType): boolean {
-    switch (resourceType) {
-      case ResourceType.IronGear: {
-        if (this.resources[ResourceType.Iron].count >= 2) {
-          this.resources[ResourceType.Iron].count -= 2;
-          this.resources[ResourceType.IronGear].count += 1;
-          return true;
-        } else {
-          return false;
-        }
-      }
-      case ResourceType.CopperWire: {
-        if (this.resources[ResourceType.CopperWire].count >= 2) {
-          this.resources[ResourceType.Copper].count -= 2;
-          this.resources[ResourceType.CopperWire].count += 1;
-          return true;
-        } else {
-          return false;
-        }
-      }
-      default: {
-        this.resources[resourceType].count += this.increment;
-        return true;
+  canSatisfyRecipe(recipe: Recipe) : boolean { 
+    for (const requiredResource of recipe.requiredResources) {
+      const requiredAmount = requiredResource.count;
+      const requiredResourceType = requiredResource.resourceType;
+      const ownedResourceAmount = this.resources[requiredResourceType].count;        
+      if (ownedResourceAmount < requiredAmount) { 
+        return false;
       }
     }
+    return true;
+  }
+
+  processResources(recipe: Recipe) {
+    for (const requiredResource of recipe.requiredResources) {
+      const requiredAmount = requiredResource.count;
+      const requiredResourceType = requiredResource.resourceType;
+      this.resources[requiredResourceType].count -= requiredAmount;
+    }
+    this.resources[recipe.output.resourceType].count += recipe.output.count;
   }
 }

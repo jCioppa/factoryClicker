@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MainComponent } from './main/main.component';
-
-const route = (path: string, component: any) => ({ path, component });
-const routes: Routes = [route('factoryClicker', MainComponent)];
+import { RouterModule } from '@angular/router';
+import { routes } from './app.routes'
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
+
 export class AppRoutingModule {}

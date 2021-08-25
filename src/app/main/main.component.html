@@ -15,61 +15,40 @@
     <p>Increment: {{this.increment}}</p>
 
     <div class = "progress_bar">
-        <progress [max]="this.expToNextLevel" [value]="clickCount"> </progress>
+        <mat-progress-bar mode="determinate" [value]="100 * (clickCount / expToNextLevel)"></mat-progress-bar>
     </div>
 
-    <div>
+    <mat-tab-group>
 
-        <h2>Resources</h2>
-
-        <div class = "resource-container">
-            <button (click) = "onClickResource(resource.Iron)"> Iron</button>
-            <span> {{this.resources[resource.Iron].count}} </span>
-        </div>
-       
-        <div class = "resource-container">
-            <button (click) = "onClickResource(resource.Copper)"> Copper</button>
-            <span> {{this.resources[resource.Copper].count}} </span>
-    
-        </div>
-       
-        <div class = "resource-container">
-            <button (click) = "onClickResource(resource.Coal)"> Coal</button>
-            <span> {{this.resources[resource.Coal].count}} </span>
-        </div>
-
-    </div>
-
-    <div>      
-        <div class = "resource-container">
-            <button (click) = "onClickResource(resource.IronGear)">Iron Gear</button>
-            <span> {{this.resources[resource.IronGear].count}} </span>
-        </div>
+        <mat-tab label="Resources">
+                <ResourceContainer *ngFor="let resourceContainer in resourceContainers"
+                    (onClick) = "onClickResource($event)"
+                    [resourceType] = "resourceContainer.resourceType"
+                    [displayName] = "resourceContainer.displayName"
+                    [resourceSource] = "resources[resourceContainer.resourceType]"
+                ></ResourceContainer>
+        </mat-tab>
         
-        <div class = "resource-container">
-            <button (click) = "onClickResource(resource.CopperWire)">Copper Wire</button>
-            <span> {{this.resources[resource.CopperWire].count}} </span>
-        </div>
-    </div>
+        <mat-tab label="Miners">  </mat-tab>
+      
+        <mat-tab label="Assemblers"> 
+            <div>     
+                <select [(ngModel)]="this.currentOption">
+                    <option *ngFor="let recipeOption of recipeOptions" 
+                        [value]="recipeOption.value">
+                            {{recipeOption.name}}
+                    </option>
+                </select>
+                
+                <Assembler 
+                    [recipe]="this.currentOption" 
+                    [resourceTransferer] = "this.resourceTransferer"
+                ></Assembler>
+            </div>
+             
+        </mat-tab>
+        <mat-tab label="Smelters"></mat-tab>
+        <mat-tab label="Science"></mat-tab>
 
-    <div>
-        <h2> Miners </h2>       
-    </div>
-
-
-    <div>
-        <h2> Smelters </h2>       
-    </div>
-
-   <div>
-       <h2> Assembler </h2>
-       <select [(ngModel)]="this.currentOption">
-           <option *ngFor="let recipeOption of recipeOptions" [value]="recipeOption.value">{{recipeOption.name}}</option>
-       </select>
-       <app-assembler [recipe]="this.currentOption" [resourceTransferer] = "this.resourceTransferer"></app-assembler>
-   </div>
-
-    <div>
-        <h2> Science </h2>       
-    </div>
+    </mat-tab-group>
 </div>
