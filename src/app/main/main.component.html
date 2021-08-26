@@ -6,49 +6,107 @@
     .resource-container { 
         margin: 10px;
     }
+    .resource-containers { 
+        width: 20%;
+        padding: 1rem;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+    .factory-root { 
+        width: 80%;
+        padding: 1rem;
+        border: 1px solid black;
+    }
+    .wrapper { 
+        display:flex;
+        flex-direction: row;
+    }
+    .smelter-container { 
+        display: flex;
+        flex-direction: column;
+    }
+    .assemblers-container { 
+        display: flex;
+        flex-direction:column;
+    }
+    .assembler-container {
+        padding: 0.5rem;
+        border: 1px solid red;
+        margin-bottom: 2px;
+    }
+    .miners-container { 
+        display: flex;
+        flex-direction:column;
+    }
+    .miner-container { 
+        padding: 0.5rem;
+        border: 1px solid red;
+        margin-bottom: 2px;
+    }
 </style>
 
-<div class = "factory-root">
-    
-    <p>Clicks: {{this.clickCount}}</p>
-    <p>Level: {{this.currentLevel}}</p>
-    <p>Increment: {{this.increment}}</p>
-
-    <div class = "progress_bar">
-        <mat-progress-bar mode="determinate" [value]="100 * (clickCount / expToNextLevel)"></mat-progress-bar>
+<div class = 'wrapper'>
+    <div class = "resource-containers">
+        <ResourceContainer *ngFor="let r of resourceContainers"
+            (onClick) = "onClickResource($event)"
+            [resourceType] = "r.resourceType"
+            [displayName] = "r.displayName"
+            [resourceSource] = "resourceInventory[r.resourceType]"
+        ></ResourceContainer>
     </div>
+    
+    <div class = "factory-root">
+    
+        <p>Clicks: {{this.clickCount}}</p>
+        <p>Level: {{this.currentLevel}}</p>
+        <p>Increment: {{this.increment}}</p>
 
-    <mat-tab-group>
+        <div class = "progress_bar">
+            <mat-progress-bar mode="determinate" [value]="100 * (clickCount / expToNextLevel)"></mat-progress-bar>
+        </div>
 
-        <mat-tab label="Resources">
-                <ResourceContainer *ngFor="let resourceContainer in resourceContainers"
-                    (onClick) = "onClickResource($event)"
-                    [resourceType] = "resourceContainer.resourceType"
-                    [displayName] = "resourceContainer.displayName"
-                    [resourceSource] = "resources[resourceContainer.resourceType]"
-                ></ResourceContainer>
-        </mat-tab>
-        
-        <mat-tab label="Miners">  </mat-tab>
-      
-        <mat-tab label="Assemblers"> 
-            <div>     
-                <select [(ngModel)]="this.currentOption">
-                    <option *ngFor="let recipeOption of recipeOptions" 
-                        [value]="recipeOption.value">
-                            {{recipeOption.name}}
-                    </option>
-                </select>
-                
-                <Assembler 
-                    [recipe]="this.currentOption" 
-                    [resourceTransferer] = "this.resourceTransferer"
-                ></Assembler>
-            </div>
-             
-        </mat-tab>
-        <mat-tab label="Smelters"></mat-tab>
-        <mat-tab label="Science"></mat-tab>
+    
+        <mat-tab-group>
+            <mat-tab label="Miners">
+                <div class = "miners-container">
+                    <div class = "miner-container" *ngFor="let miner of miners">
+                       <Miner></Miner>
+                    </div>
+                </div>
 
-    </mat-tab-group>
+            </mat-tab>        
+            <mat-tab label="Assemblers"> 
+                <div class = 'assemblers-container'>  
+                    
+                    <div class = "assembler-container" *ngFor="let assembler of assemblers">
+                        <select [(ngModel)]="this.currentOption">
+                            <option *ngFor="let recipeOption of recipeOptions" 
+                                [value]="recipeOption.value">
+                                    {{recipeOption.name}}
+                            </option>
+                        </select> 
+                        <Assembler 
+                            [resourceType]="this.currentOption" 
+                            [resourceTransferer] = "this.resourceTransferer"
+                        ></Assembler>
+                    </div>
+                </div>     
+            </mat-tab>
+            
+            <mat-tab label="Smelters">
+                <div class = 'smelters-container'>
+                    <Smelter *ngFor = "let smelter of smelters"
+                        [resourceType] = 'smelter.selectedRecipe.resourceType'
+                        [resourceTransferer] = "resourceTransferer"  
+                        [dropdownOptions] = "smelterDropdownOptions" 
+                        displayName="smelter.selectedRecipe.displayName"     
+                    ></Smelter>
+                </div>
+            </mat-tab>
+            <mat-tab label="Science"></mat-tab>
+
+        </mat-tab-group>
+    </div>
 </div>
+

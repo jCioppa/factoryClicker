@@ -15,9 +15,7 @@ interface RecipeOptionInfo {
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.sass'],
 })
-
 export class MainComponent implements OnInit {
-
   public clickCount: number = 0;
   public expToNextLevel: number = 25;
   public currentLevel: number = 0;
@@ -25,14 +23,58 @@ export class MainComponent implements OnInit {
   public resource = ResourceType;
   public currentOption: ResourceType = ResourceType.None;
 
-  public resources: any = {
+  smelterDropdownOptions: Array<any> = [
+    {
+      displayName: 'Iron ',
+      resourceType: ResourceType.Iron,
+    },
+
+    {
+      displayName: 'Copper ',
+      resourceType: ResourceType.Copper,
+    },
+
+    {
+      displayName: 'Stone Bricks',
+      resourceType: ResourceType.StoneBricks,
+    },
+
+    {
+      displayName: 'Steel',
+      resourceType: ResourceType.Steel,
+    },
+  ];
+
+  public resourceInventory: any = {
+    [ResourceType.CopperOre]: {
+      count: 0,
+    },
+
+    [ResourceType.IronOre]: {
+      count: 0,
+    },
+
+    [ResourceType.Stone]: {
+      count: 0,
+    },
+
     [ResourceType.Coal]: {
       count: 0,
     },
+
     [ResourceType.Copper]: {
       count: 0,
     },
+
     [ResourceType.Iron]: {
+      count: 0,
+    },
+
+    [ResourceType.Steel]: {
+      count: 0,
+    },
+
+    [ResourceType.StoneBricks]: {
       count: 0,
     },
     [ResourceType.IronGear]: {
@@ -41,9 +83,39 @@ export class MainComponent implements OnInit {
     [ResourceType.CopperWire]: {
       count: 0,
     },
+
+    [ResourceType.RedScience]: {
+      count: 0,
+    },
   };
 
-  public resourceTransferer: ResourceTransferManager = new ResourceTransferManager(this.resources);
+  public resourceTransferer: ResourceTransferManager =
+    new ResourceTransferManager(this.resourceInventory);
+
+  public assemblers: Array<any> = [{}, {}, {}];
+
+  public smelters: Array<any> = [
+    {
+      selectedRecipe: {
+        resourceType: ResourceType.Iron,
+        displayName: 'Iron',
+      },
+    },
+    {
+      selectedRecipe: {
+        resourceType: ResourceType.Copper,
+        displayName: 'Copper',
+      },
+    },
+    {
+      selectedRecipe: {
+        resourceType: ResourceType.Steel,
+        displayName: 'Steel',
+      },
+    },
+  ];
+
+  public miners: Array<any> = [1, 2, 3];
 
   public recipeOptions: Array<RecipeOptionInfo> = [
     {
@@ -60,40 +132,98 @@ export class MainComponent implements OnInit {
       value: ResourceType.CopperWire,
       name: 'Copper Wire',
     },
+
+    {
+      value: ResourceType.RedScience,
+      name: 'Red Science',
+    },
   ];
 
   public resourceContainers: Array<any> = [
     {
-      displayName: "Iron",
-      resourceType: ResourceType.Iron
-    }
-  ]
-  
+      displayName: 'Iron Ore',
+      resourceType: ResourceType.IronOre,
+    },
+
+    {
+      displayName: 'Copper Ore',
+      resourceType: ResourceType.CopperOre,
+    },
+    {
+      displayName: 'Coal',
+      resourceType: ResourceType.Coal,
+    },
+
+    {
+      displayName: 'Stone',
+      resourceType: ResourceType.Stone,
+    },
+
+    {
+      displayName: 'Iron',
+      resourceType: ResourceType.Iron,
+    },
+
+    {
+      displayName: 'Steel',
+      resourceType: ResourceType.Steel,
+    },
+
+    {
+      displayName: 'Copper',
+      resourceType: ResourceType.Copper,
+    },
+
+    {
+      displayName: 'Copper Wire',
+      resourceType: ResourceType.CopperWire,
+    },
+
+    {
+      displayName: 'Iron Gear',
+      resourceType: ResourceType.IronGear,
+    },
+
+    {
+      displayName: 'Red Science',
+      resourceType: ResourceType.RedScience,
+    },
+  ];
+
   ngOnInit(): void {}
 
   onSelectionChanged() {}
 
   onClickResource(resourceType: ResourceType) {
+    let clickValid: boolean = true;
     const recipe: Recipe = RecipeMap[resourceType];
-    if (recipe) { 
-      if (this.canSatisfyRecipe(recipe)) { 
+    if (recipe) {
+      if (this.canSatisfyRecipe(recipe)) {
         this.processResources(recipe);
-        this.clickCount += this.increment;
-        if (this.clickCount >= this.expToNextLevel) {
-          this.currentLevel++;
-          this.clickCount = 0;
-          this.expToNextLevel *= 2.0;         
-        }
+      } else {
+        clickValid = false;
+      }
+    } else {
+      this.resourceInventory[resourceType].count += this.increment;
+    }
+
+    if (clickValid) {
+      this.clickCount += this.increment;
+      if (this.clickCount >= this.expToNextLevel) {
+        this.currentLevel++;
+        this.clickCount = 0;
+        this.expToNextLevel *= 2.0;
       }
     }
   }
 
-  canSatisfyRecipe(recipe: Recipe) : boolean { 
+  canSatisfyRecipe(recipe: Recipe): boolean {
     for (const requiredResource of recipe.requiredResources) {
       const requiredAmount = requiredResource.count;
       const requiredResourceType = requiredResource.resourceType;
-      const ownedResourceAmount = this.resources[requiredResourceType].count;        
-      if (ownedResourceAmount < requiredAmount) { 
+      const ownedResourceAmount =
+        this.resourceInventory[requiredResourceType].count;
+      if (ownedResourceAmount < requiredAmount) {
         return false;
       }
     }
@@ -104,8 +234,9 @@ export class MainComponent implements OnInit {
     for (const requiredResource of recipe.requiredResources) {
       const requiredAmount = requiredResource.count;
       const requiredResourceType = requiredResource.resourceType;
-      this.resources[requiredResourceType].count -= requiredAmount;
+      this.resourceInventory[requiredResourceType].count -= requiredAmount;
     }
-    this.resources[recipe.output.resourceType].count += recipe.output.count;
+    this.resourceInventory[recipe.output.resourceType].count +=
+      recipe.output.count;
   }
 }

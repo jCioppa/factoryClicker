@@ -12,16 +12,17 @@ export class Assembler {
     return this.recipe ? this.recipe.name : 'NONE';
   }
 
-  start(recipe: ResourceType, resourceTransferer: ResourceTransferManager) {
+  start(
+    resourceType: ResourceType,
+    resourceTransferer: ResourceTransferManager
+  ) {
     if (this.isRunning()) {
       this.stop();
     }
-
-    if (recipe !== ResourceType.None) {
-      const newRecipe = RecipeMap[recipe];
+    if (resourceType !== ResourceType.None) {
+      const newRecipe = RecipeMap[resourceType];
       if (resourceTransferer.satisfiesRecipe(newRecipe)) {
-        const requiredResources =
-          resourceTransferer.transferResources(newRecipe);
+        resourceTransferer.transferResources(newRecipe);
         this.recipe = newRecipe;
         this.progressHandle = setInterval(
           () => this.tick(resourceTransferer),

@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-export interface LogEntry {
-  message: string;
-  time: string;
-}
+import { LoggerService } from './logger.service';
+import { LogLevel } from './LogLevel';
 
 @Component({
   selector: 'app-logger',
@@ -11,6 +8,17 @@ export interface LogEntry {
   styleUrls: ['./logger.component.sass'],
 })
 export class LoggerComponent implements OnInit {
-  @Input() logs: Array<LogEntry> = [];
+  constructor(private logger: LoggerService) {}
+
+  classMap: any = {
+    [LogLevel.Normal]: 'normal',
+    [LogLevel.Error]: 'error',
+    [LogLevel.Warning]: 'warning',
+  };
+
   ngOnInit(): void {}
+
+  logs() {
+    return this.logger.logs;
+  }
 }
