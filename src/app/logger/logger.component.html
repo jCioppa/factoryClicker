@@ -22,12 +22,35 @@
         border: 10px solid rgb(182, 159, 159);
         z-index: 9999;
     }
+    .logger-window { 
+        height:230px;
+    }
+
+    .logger-console { 
+
+    }
+
+    .logger-input { 
+        margin-left: 1rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem;
+        font-size: 20px;
+        color:rgb(22, 158, 28);
+        background: rgb(58, 54, 54);
+        border: none;
+        width: 760px;
+    }
 </style>
 
 <div class = "logger">
-    <ul>
-        <li *ngFor="let log of logs()">
-            <span [class]="classMap[log.level]">[{{log.time}}] {{log.message}}</span><br>
-        </li>
-    </ul>
+    <div class = "logger-window">
+        <ul>
+            <li *ngFor="let log of logs()">
+                <span [class]="classMap[log.level]">[{{log.time}}] {{log.message}}</span><br>
+            </li>
+        </ul>
+    </div>
+    <div class = "logger-console"> 
+        <input class = 'logger-input' (keyup.enter) = "onSubmitCommand()" [(ngModel)] = "commandString" >
+    </div>
 </div>

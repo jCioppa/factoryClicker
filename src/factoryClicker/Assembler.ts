@@ -1,6 +1,5 @@
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { Recipe } from './Recipe';
-import { RecipeMap } from './data/RecipeMap';
 import { ResourceTransferManager } from './ResourceTransferManager';
 
 export class Assembler {
@@ -12,23 +11,17 @@ export class Assembler {
     return this.recipe ? this.recipe.name : 'NONE';
   }
 
-  start(
-    resourceType: ResourceType,
-    resourceTransferer: ResourceTransferManager
-  ) {
+  start(newRecipe: Recipe, resourceTransferer: ResourceTransferManager) {
     if (this.isRunning()) {
       this.stop();
     }
-    if (resourceType !== ResourceType.None) {
-      const newRecipe = RecipeMap[resourceType];
-      if (resourceTransferer.satisfiesRecipe(newRecipe)) {
-        resourceTransferer.transferResources(newRecipe);
-        this.recipe = newRecipe;
-        this.progressHandle = setInterval(
-          () => this.tick(resourceTransferer),
-          newRecipe.duration
-        );
-      }
+    if (resourceTransferer.satisfiesRecipe(newRecipe)) {
+      resourceTransferer.transferRequiredRecipeResources(newRecipe);
+      this.recipe = newRecipe;
+      this.progressHandle = setInterval(
+        () => this.tick(resourceTransferer),
+        newRecipe.duration
+      );
     }
   }
 
@@ -50,7 +43,7 @@ export class Assembler {
       if (this.progress >= this.recipe.duration) {
         this.stop();
         const result = this.recipe.output;
-        resourceTransferer.returnResources(result);
+        resourceTransferer.returnRecipeResult(result);
       }
     }
   }

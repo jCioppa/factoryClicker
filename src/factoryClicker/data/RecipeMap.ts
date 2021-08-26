@@ -1,128 +1,109 @@
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 
+const resourceEntry = (resourceType: any, count: number) => ({
+  resourceType,
+  count,
+});
+
+const recipeEntry = (
+  name: string,
+  resourceType: ResourceType,
+  duration: number,
+  output: any,
+  requiredResources: Array<any>
+) => ({
+  name,
+  resourceType,
+  duration,
+  output,
+  requiredResources,
+});
+
+export const SmelterRecipes = [
+  recipeEntry(
+    'Iron',
+    ResourceType.Iron,
+    10,
+    resourceEntry(ResourceType.Iron, 1),
+    [
+      resourceEntry(ResourceType.IronOre, 1),
+      resourceEntry(ResourceType.Coal, 1),
+    ]
+  ),
+];
+
+export const AssemblerRecipes = [
+  recipeEntry(
+    'Gear',
+    ResourceType.IronGear,
+    10,
+    resourceEntry(ResourceType.Iron, 1),
+    [resourceEntry(ResourceType.Iron, 2)]
+  ),
+];
+
 export const RecipeMap: any = {
   [ResourceType.Iron]: {
     name: 'Iron',
     duration: 10,
-    output: {
-      resourceType: ResourceType.Iron,
-      count: 1,
-    },
+    output: resourceEntry(ResourceType.Iron, 1),
     requiredResources: [
-      {
-        resourceType: ResourceType.IronOre,
-        count: 1,
-      },
-      {
-        resourceType: ResourceType.Coal,
-        count: 1,
-      },
+      resourceEntry(ResourceType.IronOre, 1),
+      resourceEntry(ResourceType.Coal, 1),
     ],
   },
 
   [ResourceType.Copper]: {
     name: 'Copper',
     duration: 10,
-    output: {
-      resourceType: ResourceType.Copper,
-      count: 1,
-    },
+    output: resourceEntry(ResourceType.Copper, 1),
     requiredResources: [
-      {
-        resourceType: ResourceType.CopperOre,
-        count: 1,
-      },
-      {
-        resourceType: ResourceType.Coal,
-        count: 1,
-      },
+      resourceEntry(ResourceType.CopperOre, 1),
+      resourceEntry(ResourceType.Coal, 1),
     ],
   },
 
   [ResourceType.StoneBricks]: {
     name: 'StoneBricks',
     duration: 10,
-    output: {
-      resourceType: ResourceType.StoneBricks,
-      count: 1,
-    },
+    output: resourceEntry(ResourceType.StoneBricks, 1),
     requiredResources: [
-      {
-        resourceType: ResourceType.Stone,
-        count: 1,
-      },
-      {
-        resourceType: ResourceType.Coal,
-        count: 1,
-      },
+      resourceEntry(ResourceType.Stone, 1),
+      resourceEntry(ResourceType.Coal, 1),
     ],
   },
 
   [ResourceType.Steel]: {
     name: 'Steel',
     duration: 50,
-    output: {
-      resourceType: ResourceType.Steel,
-      count: 1,
-    },
+    output: resourceEntry(ResourceType.Steel, 1),
     requiredResources: [
-      {
-        resourceType: ResourceType.Iron,
-        count: 5,
-      },
-      {
-        resourceType: ResourceType.Coal,
-        count: 1,
-      },
+      resourceEntry(ResourceType.Iron, 5),
+      resourceEntry(ResourceType.Coal, 1),
     ],
   },
 
   [ResourceType.IronGear]: {
     name: 'Iron Gears',
     duration: 25,
-    output: {
-      resourceType: ResourceType.IronGear,
-      count: 2,
-    },
-    requiredResources: [
-      {
-        resourceType: ResourceType.Iron,
-        count: 2,
-      },
-    ],
+    output: resourceEntry(ResourceType.IronGear, 2),
+    requiredResources: [resourceEntry(ResourceType.Iron, 2)],
   },
 
   [ResourceType.CopperWire]: {
     name: 'Copper Wire',
     duration: 25,
-    output: {
-      resourceType: ResourceType.CopperWire,
-      count: 2,
-    },
-    requiredResources: [
-      {
-        resourceType: ResourceType.Copper,
-        count: 2,
-      },
-    ],
+    output: resourceEntry(ResourceType.CopperWire, 2),
+    requiredResources: [resourceEntry(ResourceType.Copper, 2)],
   },
 
   [ResourceType.RedScience]: {
     name: 'Red Science',
     duration: 100,
-    output: {
-      resourceType: ResourceType.RedScience,
-      count: 1,
-    },
+    output: resourceEntry(ResourceType.RedScience, 1),
     requiredResources: [
-      {
-        resourceType: ResourceType.Copper,
-        count: 1,
-      },
-      {
-        resourceType: ResourceType.IronGear,
-        count: 1,
-      },
+      resourceEntry(ResourceType.Copper, 1),
+      resourceEntry(ResourceType.IronGear, 1),
     ],
   },
 };
