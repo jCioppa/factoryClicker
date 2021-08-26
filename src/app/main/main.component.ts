@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RecipeMap } from 'src/factoryClicker/data/RecipeMap';
 import { Recipe } from 'src/factoryClicker/Recipe';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
+import { RecipeService } from '../services/RecipeService';
 
 // these are options in the recipe dropdown, and isn't used outside this class
 interface RecipeOptionInfo {
@@ -190,13 +190,15 @@ export class MainComponent implements OnInit {
     },
   ];
 
-  ngOnInit(): void {}
+  constructor(private recipeService: RecipeService) {}
 
+  ngOnInit(): void {}
   onSelectionChanged() {}
 
   onClickResource(resourceType: ResourceType) {
     let clickValid: boolean = true;
-    const recipe: Recipe = RecipeMap[resourceType];
+    const recipe: Recipe = this.recipeService.findRecipe(resourceType);
+
     if (recipe) {
       if (this.canSatisfyRecipe(recipe)) {
         this.processResources(recipe);

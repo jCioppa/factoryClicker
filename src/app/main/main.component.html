@@ -71,7 +71,9 @@
             <mat-tab label="Miners">
                 <div class = "miners-container">
                     <div class = "miner-container" *ngFor="let miner of miners">
-                       <Miner></Miner>
+                       <Miner
+                            [resourceTransferer] = "this.resourceTransferer"
+                       ></Miner>
                     </div>
                 </div>
 

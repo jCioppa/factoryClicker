@@ -6,6 +6,10 @@ import { LogLevel } from './LogLevel';
 export class LoggerService {
   logs: Array<LogEntry> = [];
 
+  clearLogs() {
+    this.logs = [];
+  }
+
   log(className: string, methodName: string, message: string) {
     this.logs = [
       {

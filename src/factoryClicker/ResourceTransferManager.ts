@@ -1,12 +1,25 @@
 import { Recipe } from './Recipe';
 import { ReceipeResult } from './RecipeResult';
 import { RequiredResourceInfo } from './RequiredResourceInfo';
+import { ResourceType } from './ResourceType';
 
 export class ResourceTransferManager {
   public resourceContainer: any;
 
   constructor(resourceContainer: any) {
     this.resourceContainer = resourceContainer;
+  }
+
+  tryTransferResource(resourceType: ResourceType, amount: number): boolean {
+    if (this.resourceContainer[resourceType].count >= amount) {
+      this.resourceContainer[resourceType].count -= amount;
+      return true;
+    }
+    return false;
+  }
+
+  returnResource(resourceType: ResourceType, amount: number) {
+    this.resourceContainer[resourceType].count += amount;
   }
 
   satisfiesRecipe(recipe: Recipe): boolean {
@@ -21,7 +34,7 @@ export class ResourceTransferManager {
     return true;
   }
 
-  transferResources(recipe: Recipe): Array<RequiredResourceInfo> {
+  transferRequiredRecipeResources(recipe: Recipe): Array<RequiredResourceInfo> {
     let resources: Array<RequiredResourceInfo> = [];
 
     for (let requiredResource of recipe.requiredResources) {
@@ -34,7 +47,7 @@ export class ResourceTransferManager {
     return resources;
   }
 
-  returnResources(result: ReceipeResult) {
-    this.resourceContainer[result.resourceType].count += result.count;
+  returnRecipeResult(result: ReceipeResult) {
+    this.returnResource(result.resourceType, result.count);
   }
 }

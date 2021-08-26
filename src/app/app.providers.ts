@@ -1,3 +1,4 @@
 import { LoggerService } from './logger/logger.service';
-
-export const providers = [LoggerService];
+import { CommandService } from './services/CommandService';
+import { RecipeService } from './services/RecipeService';
+export const providers = [LoggerService, CommandService, RecipeService];

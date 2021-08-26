@@ -1,1 +1,51 @@
-<p>miner works!</p>
+<style>
+    .miner-container-top { 
+        padding: 10px;
+    }
+    .miner-container-bottom {
+        padding: 10px;
+
+        display: flex;
+        flex-direction: row;
+    }
+    .miner-coal-input {
+        border: 1px solid green;
+        padding: 0.5rem;
+    }
+    .miner-resource-output {
+        border: 1px solid green;
+        padding: 0.5rem;
+    }
+
+    .miner-progress { 
+        
+        width: 500px;
+        border: 1px solid red;
+        margin: 15px;
+        height: 10px;
+    }
+
+</style>
+
+
+<div class = "miner-container">
+   
+    <div class = 'miner-container-top'> 
+        <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
+            <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>
+        </select>
+        <mat-checkbox  [(ngModel)]="loop">Loop</mat-checkbox>
+    </div>
+
+    <div class = 'miner-container-bottom'>
+        <div class = 'miner-coal-input'>
+               <button (click) = "transferCoal()">{{coalCount}}</button>
+        </div>
+        <mat-progress-bar class = 'miner-progress' mode="determinate" [value]="minerProgress()"></mat-progress-bar>
+        <div class = 'miner-resource-output'>
+            <button (click) = "transferOutput()"><</button>
+            <span>{{outputCount}}</span>
+        </div>
+    </div>
+    
+</div>
