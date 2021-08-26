@@ -78,20 +78,10 @@
 
             </mat-tab>        
             <mat-tab label="Assemblers"> 
-                <div class = 'assemblers-container'>  
-                    
-                    <div class = "assembler-container" *ngFor="let assembler of assemblers">
-                        <select [(ngModel)]="this.currentOption">
-                            <option *ngFor="let recipeOption of recipeOptions" 
-                                [value]="recipeOption.value">
-                                    {{recipeOption.name}}
-                            </option>
-                        </select> 
-                        <Assembler 
-                            [resourceType]="this.currentOption" 
-                            [resourceTransferer] = "this.resourceTransferer"
-                        ></Assembler>
-                    </div>
+                <div class = 'assemblers-container'>   
+                    <Assembler *ngFor="let assembler of availableAssemblers"
+                        [resourceTransferer] = "this.resourceTransferer"
+                    ></Assembler>                  
                 </div>     
             </mat-tab>
             

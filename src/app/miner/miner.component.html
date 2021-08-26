@@ -36,6 +36,7 @@
 </style>
 
 <div class = "miner-container">   
+  
     <div class = 'miner-container-top'> 
         <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
             <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>
@@ -44,9 +45,11 @@
     </div>
 
     <div class = 'miner-container-bottom'>
+      
         <div class = 'miner-coal-input'>
                <button (click) = "transferCoal()">{{coalCount}}</button>
         </div>
+        
         <mat-progress-bar class = 'miner-progress' mode="determinate" [value]="minerProgress()"></mat-progress-bar>
         <div class = 'miner-resource-output'>
             <button class = 'transfer-button' (click) = "transferOutput()"><</button>

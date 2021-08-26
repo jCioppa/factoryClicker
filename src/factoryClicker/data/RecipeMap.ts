@@ -9,26 +9,57 @@ const recipeEntry = (
   name: string,
   resourceType: ResourceType,
   duration: number,
-  output: any,
-  requiredResources: Array<any>
+  requiredResources: Array<any>,
+  output: any
 ) => ({
   name,
   resourceType,
   duration,
-  output,
   requiredResources,
+  output,
 });
+
+export const MinerRecipes = [
+  recipeEntry(
+    'Coal',
+    ResourceType.Coal,
+    10,
+    [resourceEntry(ResourceType.Coal, 1)],
+    resourceEntry(ResourceType.Coal, 1)
+  ),
+  recipeEntry(
+    'Iron Ore',
+    ResourceType.IronOre,
+    10,
+    [resourceEntry(ResourceType.Coal, 1)],
+    resourceEntry(ResourceType.IronOre, 1)
+  ),
+  recipeEntry(
+    'Copper Ore',
+    ResourceType.CopperOre,
+    10,
+    [resourceEntry(ResourceType.Coal, 1)],
+    resourceEntry(ResourceType.CopperOre, 1)
+  ),
+  recipeEntry(
+    'Stone',
+    ResourceType.Stone,
+    10,
+    [resourceEntry(ResourceType.Coal, 1)],
+    resourceEntry(ResourceType.Stone, 1)
+  ),
+];
 
 export const SmelterRecipes = [
   recipeEntry(
     'Iron',
     ResourceType.Iron,
     10,
-    resourceEntry(ResourceType.Iron, 1),
     [
       resourceEntry(ResourceType.IronOre, 1),
       resourceEntry(ResourceType.Coal, 1),
-    ]
+    ],
+    resourceEntry(ResourceType.Iron, 1)
   ),
 ];
 
@@ -37,8 +68,8 @@ export const AssemblerRecipes = [
     'Gear',
     ResourceType.IronGear,
     10,
-    resourceEntry(ResourceType.Iron, 1),
-    [resourceEntry(ResourceType.Iron, 2)]
+    [resourceEntry(ResourceType.Iron, 2)],
+    resourceEntry(ResourceType.Iron, 1)
   ),
 ];
 

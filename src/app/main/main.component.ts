@@ -23,6 +23,8 @@ export class MainComponent implements OnInit {
   public resource = ResourceType;
   public currentOption: ResourceType = ResourceType.None;
 
+  availableAssemblers: Array<any> = [1, 2, 3];
+
   smelterDropdownOptions: Array<any> = [
     {
       displayName: 'Iron ',

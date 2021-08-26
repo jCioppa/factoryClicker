@@ -1,7 +1,12 @@
-<div *ngIf = "assembler">
-    <div *ngIf = "assembler.recipe">
-        <p>Progress: {{assembler.progress}}</p>
-        <progress [max]="assembler.recipe.duration" [value]="assembler.progress"> </progress>
-    </div>
-    <button (click)="startAssembler()">Start</button>
+<select [(ngModel)]="selectedOption">
+    <option *ngFor="let o of availableRecipes" 
+        [value]="o.value">
+            {{o.name}}
+    </option>
+</select> 
+
+<div *ngIf = "recipeSet">
+    <progress [max]="state.duration" [value]="state.progress"> </progress>
 </div>
+
+<button (click)="startAssembler()">Start</button>
