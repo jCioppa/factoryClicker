@@ -13,6 +13,8 @@ export class ResourceContainerComponent implements OnInit {
 
   @Output() onClick = new EventEmitter<ResourceType>();
 
+  canClickResource: boolean = true;
+
   ngOnInit(): void {}
 
   onClickResource(): void {

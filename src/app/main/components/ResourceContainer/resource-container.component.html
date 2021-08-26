@@ -1,13 +1,13 @@
 <style>
     .resource-container { 
         padding: 1rem;
-        border: 1px solid red;
         margin-bottom: 2px;
+        border: 1px solid red;
+        background: #aeaeae
     }
     .resource-title { 
         margin-right: 2px;
         display: inline-block;
-        border: 1px solid blue;
         padding: 0.25rem;
         width: 150px;
     }
@@ -15,5 +15,5 @@
 
 <div class = "resource-container">
     <span class = 'resource-title'>{{displayName}}: {{resourceSource.count}}</span>
-    <button (click) = "onClickResource()">+</button>
+    <button (click) = "onClickResource()" [disabled] = "!canClickResource">+</button>
 </div>
