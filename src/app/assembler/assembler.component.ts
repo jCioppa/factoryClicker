@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Assembler } from 'src/factoryClicker/Assembler';
 import { Recipe } from 'src/factoryClicker/Recipe';
-import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ReceipeResult } from 'src/factoryClicker/RecipeResult';
+import { ResourceQuery, ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
 import { LoggerService } from '../logger/logger.service';
 import { CommandService } from '../services/CommandService';
@@ -18,18 +20,17 @@ interface RecipeOptionInfo {
   styleUrls: ['./assembler.component.sass'],
 })
 export class AssemblerComponent implements OnInit, OnDestroy {
-  @Input() resourceType?: ResourceType;
-  @Input() resourceTransferer?: ResourceTransferManager;
+  @Input() inventoryPipe?: ResourceTransferManager;
 
   assembler: Assembler = new Assembler();
-  recipeSet: boolean = false;
   activeRecipe?: Recipe;
   selectedOption?: ResourceType;
-
-  state: any = {
-    duration: 0,
-    progress: 0,
-  };
+  
+  recipeSet: boolean = false;
+  duration: number = 0;
+  progress: number = 0;
+  outputCount: number = 0;
+  loop: boolean = false;  
 
   public availableRecipes: Array<RecipeOptionInfo> = [
     {
@@ -58,36 +59,83 @@ export class AssemblerComponent implements OnInit, OnDestroy {
     private commandService: CommandService,
     private recipeService: RecipeService
   ) {
-    commandService.registerCommand(
-      'sendResources',
-      'sends arg0 resources to the target',
-      this.sendResources
-    );
+      
   }
 
-  startAssembler(): void {
-    if (this.resourceTransferer && this.resourceType) {
-      this.activeRecipe = this.recipeService.findRecipe(this.resourceType);
+  pushOutputToSource() { 
+    if (this.activeRecipe) { 
+      this.inventoryPipe?.returnResource(this.activeRecipe.output.resourceType, this.outputCount);
+      this.outputCount = 0;
+    }
+  }
+
+  // called when the dropdown option changes
+  onRecipeChanged() { 
+    if (this.selectedOption) {
+      this.activeRecipe = this.recipeService.findRecipe(this.selectedOption); 
       if (this.activeRecipe) {
         this.recipeSet = true;
-        this.assembler.start(this.activeRecipe, this.resourceTransferer);
-      } else {
+        this.assembler.initializeInventory(this.activeRecipe);
+      } else { 
         this.recipeSet = false;
       }
     }
   }
 
-  sendResources(count: any) {
-    if (this.resourceType && this.resourceTransferer) {
-      const resourceCount: number = parseInt(count, 10);
-      this.resourceTransferer.returnRecipeResult({
-        resourceType: this.resourceType,
-        count: resourceCount,
-      });
+  assemblerProgress(): number { 
+    return !(this.assembler && this.assembler && this.assembler.recipe) ? 0 : 
+         100 * (this.assembler.progress / this.assembler.recipe.duration);
+  }
+
+  getAvailableResourceCount(resourceType: ResourceType): number { 
+    const result: number = this.assembler.requiredResourceStore[resourceType].count;
+    return result ?? 0;
+  }
+
+  assemblerCallbacks = {
+    // called when a recipe is complete
+    next: (result: ReceipeResult) => this.onRecipeComplete(result),
+
+    // called when a recipe is complete and we're not able to build another recipe
+    complete: () => this.onAssemblingComplete(),
+
+    // called on error
+    error: (err: any) => this.onAssemblingError(err)
+  };
+
+  listener?: Subscription;
+
+  startAssembler(): void {
+    if (this.recipeSet &&  this.activeRecipe && this.inventoryPipe) {
+      const observable = this.assembler.startAssembling(this.activeRecipe, this.loop);
+      if (observable) { 
+        this.listener = observable.subscribe(this.assemblerCallbacks)
+      }
     }
   }
 
-  ngOnDestroy(): void {}
+  onRecipeComplete(result: ReceipeResult) { 
+    this.outputCount += result.count;
+  }
+
+  onAssemblingError(error: any) {
+    this.logger.error('AssemblerComponent', 'onAssemblingError', error.toString());
+  }
+
+  onAssemblingComplete() { 
+    if (this.listener) { 
+      this.listener.unsubscribe();
+    }
+  }
+
+  transferRequiredResource(resourceType: ResourceType) {
+    const result: any = this.inventoryPipe?.getFromSource(resourceType, 1);
+    this.assembler.addToStore(result);
+  }
+
+  ngOnDestroy(): void {
+    this.onAssemblingComplete()  
+  }
 
   ngOnInit(): void {}
 }

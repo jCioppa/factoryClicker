@@ -22,6 +22,8 @@ export class MinerComponent implements OnInit {
   miningSpeed: number = 0.05;
   activeRecipe: any = null;
 
+  running: boolean = false;
+
   dropdownOptions: Array<any> = [
     {
       displayName: 'Iron Ore',
@@ -51,20 +53,12 @@ export class MinerComponent implements OnInit {
     this.activeRecipe = this.recipeService.findMiningRecipe(selectedOption);
     if (this.activeRecipe) {
       this.tryStartMining(this.activeRecipe);
-    } else {
-      this.logger.warning(
-        'Miner',
-        'onRecipeSelectionChanged',
-        'no active recipe set'
-      );
-    }
+    } 
   }
 
   minerProgress(): number {
     if (this.activeRecipe) {
       return 100 * (this.progress / this.activeRecipe.duration);
-    } else {
-      this.logger.warning('Miner', 'minerProgress', 'no active recipe set');
     }
     return 0;
   }
@@ -74,12 +68,8 @@ export class MinerComponent implements OnInit {
       this.coalCount++;
       if (this.activeRecipe) {
         this.tryStartMining(this.activeRecipe);
-      } else {
-        this.logger.warning('Miner', 'transferCoal', 'no active recipe');
       }
-    } else {
-      this.logger.warning('Miner', 'transferCoal', 'failed coal transer');
-    }
+    } 
   }
 
   isRunning(): boolean {
@@ -94,19 +84,9 @@ export class MinerComponent implements OnInit {
           this.smeltingHandle = setInterval(() => {
             this.tick(recipe);
           }, 10);
-        } else {
-          this.logger.warning(
-            'Miner',
-            'tryStartMining',
-            'output limit reached'
-          );
-        }
-      } else {
-        this.logger.warning('Miner', 'tryStartMining', 'not enough coal');
-      }
-    } else {
-      this.logger.warning('Miner', 'tryStartMining', 'already mining');
-    }
+        } 
+      } 
+    } 
   }
 
   // returns the built resources back to the resource owner, via the resource transferer
@@ -120,13 +100,7 @@ export class MinerComponent implements OnInit {
         );
         this.outputCount = 0;
       }
-    } else {
-      this.logger.warning(
-        'Miner',
-        'transferOutput',
-        'no resources to transfer'
-      );
-    }
+    } 
   }
 
   tick(recipe: any) {

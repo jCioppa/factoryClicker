@@ -2,6 +2,7 @@
     .miner-container {
         background: #aeaeae;
         border: 3px solid black;
+        position: relative;
     }
 
     .miner-container-top { 
@@ -33,10 +34,35 @@
     .loop { 
         margin-left: 15px;
     }
+
+    .green {
+        background: green;
+    }
+
+    .yellow {
+        background: yellow;
+    }
+    .red {
+        background: red;
+    }
+   
+    .indicator { 
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        display: inline-block; 
+        top: 10px;
+        right: 10px;
+    }
 </style>
 
 <div class = "miner-container">   
   
+    <span *ngIf="!activeRecipe" class = 'red indicator'></span>
+    <span *ngIf="activeRecipe && !isRunning()" class = 'yellow indicator'></span>
+    <span *ngIf="activeRecipe && isRunning()" class = 'green indicator'></span>
+
     <div class = 'miner-container-top'> 
         <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
             <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>

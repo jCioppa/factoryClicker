@@ -80,7 +80,7 @@
             <mat-tab label="Assemblers"> 
                 <div class = 'assemblers-container'>   
                     <Assembler *ngFor="let assembler of availableAssemblers"
-                        [resourceTransferer] = "this.resourceTransferer"
+                        [inventoryPipe] = "this.resourceTransferer"
                     ></Assembler>                  
                 </div>     
             </mat-tab>

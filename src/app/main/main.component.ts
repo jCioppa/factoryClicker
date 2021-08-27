@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Recipe } from 'src/factoryClicker/Recipe';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
+import { CommandService } from '../services/CommandService';
 import { RecipeService } from '../services/RecipeService';
 
 // these are options in the recipe dropdown, and isn't used outside this class
@@ -192,7 +193,34 @@ export class MainComponent implements OnInit {
     },
   ];
 
-  constructor(private recipeService: RecipeService) {}
+  constructor(private recipeService: RecipeService, private commandService: CommandService) {
+    
+    commandService.registerCommand('inventory', 'manages inventory', (option: string) => { 
+
+      switch (option) { 
+        case 'fill': { 
+          for (let key in this.resourceInventory) { 
+            this.resourceInventory[key].count = 1000;
+          } 
+          break; 
+        } 
+        case 'empty': { 
+          for (let key in this.resourceInventory) { 
+            this.resourceInventory[key].count = 0;
+          }  
+          break;
+        }
+        default: { 
+          alert(1)
+        }
+      }
+    
+   })
+
+
+    
+
+  }
 
   ngOnInit(): void {}
   onSelectionChanged() {}

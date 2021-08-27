@@ -3,8 +3,47 @@ import { ReceipeResult } from './RecipeResult';
 import { RequiredResourceInfo } from './RequiredResourceInfo';
 import { ResourceType } from './ResourceType';
 
+interface ResourceSource {
+    resourceType: ResourceType; 
+    count: number;
+}
+
+export interface ResourceQuery { 
+  resourceType: ResourceType; 
+  count: number;
+}
+
+export const resourceQuery  = (resourceType: ResourceType, count: number ): ResourceQuery => ({resourceType, count})
+
+class ResourcePipe { 
+    
+    private from: ResourceSource;
+    private to: ResourceSource;
+
+    constructor(from: ResourceSource, to: ResourceSource) { 
+      this.from = from;
+      this.to = to;
+    }
+
+    pushTo(amount: number) {
+      if (this.from.count >= amount) {
+        this.from.count -= amount;
+        this.to.count += amount;
+      }
+    }
+
+    pullFrom(amount: number) {
+      if (this.to.count >= amount) {
+        this.to.count -= amount;
+        this.from.count += amount;
+      }
+    }
+
+}
+
 export class ResourceTransferManager {
   public resourceContainer: any;
+  public inventoryPipe?: ResourcePipe;
 
   constructor(resourceContainer: any) {
     this.resourceContainer = resourceContainer;
@@ -36,18 +75,28 @@ export class ResourceTransferManager {
 
   transferRequiredRecipeResources(recipe: Recipe): Array<RequiredResourceInfo> {
     let resources: Array<RequiredResourceInfo> = [];
-
+    
     for (let requiredResource of recipe.requiredResources) {
       const resourceRequirement = requiredResource.count;
       this.resourceContainer[requiredResource.resourceType].count -=
         resourceRequirement;
       resources.push({ ...requiredResource });
     }
-
+    
     return resources;
   }
 
-  returnRecipeResult(result: ReceipeResult) {
-    this.returnResource(result.resourceType, result.count);
+  getFromSource(resourceType: ResourceType, amount: number): ResourceQuery { 
+
+    let amountFetched: number = 0;  
+    if (this.resourceContainer[resourceType].count >= amount){
+      this.resourceContainer[resourceType].count -= amount;
+      amountFetched = amount;
+    }
+    return resourceQuery(resourceType, amountFetched);
+  }
+
+  sendToSource(result: ReceipeResult) {
+    this.resourceContainer[result.resourceType].count += result.count;
   }
 }

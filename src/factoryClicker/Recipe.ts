@@ -5,6 +5,6 @@ import { RequiredResourceInfo } from './RequiredResourceInfo';
 export interface Recipe {
   name: string;
   duration: number;
-  output: ReceipeResult;
   requiredResources: Array<RequiredResourceInfo>;
+  output: ReceipeResult;
 }

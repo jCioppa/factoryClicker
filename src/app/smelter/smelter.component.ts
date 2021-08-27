@@ -10,9 +10,7 @@ class Smelter {
   duration: number = 0;
   progressHandle: any = null;
 
-  recipeName(): string {
-    return this.recipe ? this.recipe.name : 'NONE';
-  }
+
 
   start(newRecipe: Recipe, resourceTransferer: ResourceTransferManager) {
     if (this.isRunning()) {
@@ -48,7 +46,7 @@ class Smelter {
       if (this.progress >= this.recipe.duration) {
         this.stop();
         const result = this.recipe.output;
-        resourceTransferer.returnRecipeResult(result);
+        resourceTransferer.sendToSource(result);
       }
     }
   }

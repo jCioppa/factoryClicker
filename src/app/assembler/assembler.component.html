@@ -1,12 +1,93 @@
-<select [(ngModel)]="selectedOption">
-    <option *ngFor="let o of availableRecipes" 
-        [value]="o.value">
+<style>
+    .ass-root { 
+        background: #aeaeae;
+        border: 3px solid black;
+        margin: 5px;
+        padding: 1rem;
+        width: 500px;
+    }
+
+    .required-resources { 
+        display: flex;
+        flex-direction: row;
+    }
+
+    .required-resource { 
+        padding: 0.25rem;
+    }
+    .green {
+        background: green;
+    }
+
+    .yellow {
+        background: yellow;
+    }
+    .red {
+        background: red;
+    }
+    .assembler-progress-bar {
+        height: 12px;
+        width: 350px;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 10px;
+    }
+
+    .indicator { 
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        display: inline-block; 
+        position: absolute;
+        top: 25;
+        right: 125px;
+    }
+
+    .loop { 
+
+    }
+
+    .progress-section { 
+        display: flex;
+        flex-direction: row;
+    }
+
+    .assembler-transfer-button { 
+        margin-right: 10px;
+    }
+
+</style>
+
+<div class='ass-root'>
+
+    <select [(ngModel)]="selectedOption" (change)="onRecipeChanged()">
+        <option *ngFor="let o of availableRecipes" 
+            [value]="o.value">
             {{o.name}}
-    </option>
-</select> 
+        </option>
+    </select> 
 
-<div *ngIf = "recipeSet">
-    <progress [max]="state.duration" [value]="state.progress"> </progress>
+    <span *ngIf="!activeRecipe" class = 'red indicator'></span>
+    <span *ngIf="activeRecipe && !assembler.running" class = 'yellow indicator'></span>
+    <span *ngIf="activeRecipe && assembler.running" class = 'green indicator'></span>
+
+    <mat-checkbox class = 'loop'  [(ngModel)]="loop">Loop</mat-checkbox>
+
+    <div *ngIf = "activeRecipe" class = "progress-section">
+        <div class = 'required-resources'>
+            <div class = 'required-resource' *ngFor = "let ingredient of activeRecipe.requiredResources">
+                <button (click) = "transferRequiredResource(ingredient.resourceType)">{{ getAvailableResourceCount(ingredient.resourceType)}}</button>
+            </div>
+        </div>
+        <div>
+            <mat-progress-bar class = "assembler-progress-bar" mode="determinate" [value]="assemblerProgress()"></mat-progress-bar>
+        </div>
+
+        <div class = 'assembler-resource-output'>
+            <button class = 'assembler-transfer-button' (click) = "pushOutputToSource()"><</button>
+            <span>{{outputCount}}</span>
+        </div>
+    </div>
+
+    <button (click)="startAssembler()">Start</button>
 </div>
-
-<button (click)="startAssembler()">Start</button>
