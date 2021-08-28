@@ -1,85 +1,33 @@
-<style>
-    .miner-container {
-        background: #aeaeae;
-        border: 3px solid black;
-        position: relative;
-    }
-
-    .miner-container-top { 
-        padding: 10px;
-    }
-    .miner-container-bottom {
-        padding: 10px;
-
-        display: flex;
-        flex-direction: row;
-    }
-    .miner-coal-input {
-        padding: 0.5rem;
-    }
-    .miner-resource-output {
-        padding: 0.5rem;
-    }
-
-    .miner-progress {  
-        width: 500px;
-        margin: 15px;
-        height: 10px;
-    }
-    
-    .transfer-button { 
-        margin-right: 15px;
-    }
-
-    .loop { 
-        margin-left: 15px;
-    }
-
-    .green {
-        background: green;
-    }
-
-    .yellow {
-        background: yellow;
-    }
-    .red {
-        background: red;
-    }
-   
-    .indicator { 
-        position: absolute;
-        height: 18px;
-        width: 18px;
-        border-radius: 50%;
-        display: inline-block; 
-        top: 10px;
-        right: 10px;
-    }
-</style>
-
 <div class = "miner-container">   
   
-    <span *ngIf="!activeRecipe" class = 'red indicator'></span>
-    <span *ngIf="activeRecipe && !isRunning()" class = 'yellow indicator'></span>
-    <span *ngIf="activeRecipe && isRunning()" class = 'green indicator'></span>
-
     <div class = 'miner-container-top'> 
-        <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
-            <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>
-        </select>
-        <mat-checkbox class = 'loop'  [(ngModel)]="loop">Loop</mat-checkbox>
+
+        <div class = "miner-recipe-select">
+            <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
+                <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>
+            </select>
+        </div>
+
+        <div class="active-indicator">
+            <div *ngIf="!activeRecipe" class = 'red indicator'></div>
+            <div *ngIf="activeRecipe && !isRunning()" class = 'yellow indicator'></div>
+            <div *ngIf="activeRecipe && isRunning()" class = 'green indicator'></div>
+        </div>
+
     </div>
 
-    <div class = 'miner-container-bottom'>
-      
-        <div class = 'miner-coal-input'>
-               <button (click) = "transferCoal()">{{coalCount}}</button>
+    <div class = 'miner-container-bottom' *ngIf = "activeRecipe">
+ 
+        <div class = "miner-coal-input">
+            <button  (click) = "transferCoal()">{{coalCount}}</button>
         </div>
         
-        <mat-progress-bar class = 'miner-progress' mode="determinate" [value]="minerProgress()"></mat-progress-bar>
+        <div class = "miner-progress">
+            <mat-progress-bar class = 'miner-progress-bar' mode="determinate" [value]="minerProgress()"></mat-progress-bar>
+        </div>
+        
         <div class = 'miner-resource-output'>
-            <button class = 'transfer-button' (click) = "transferOutput()"><</button>
-            <span>{{outputCount}}</span>
+            <button  class = 'transfer-button' (click) = "transferOutput()">{{outputCount}}</button>
         </div>
     </div>
 </div>

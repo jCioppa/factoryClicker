@@ -1,93 +1,40 @@
-<style>
-    .ass-root { 
-        background: #aeaeae;
-        border: 3px solid black;
-        margin: 5px;
-        padding: 1rem;
-        width: 500px;
-    }
+<div class='assembler-container'>
 
-    .required-resources { 
-        display: flex;
-        flex-direction: row;
-    }
+    <div class = "assembler-container-top">
+        <div class = "assembler-select">
+            <select [(ngModel)]="selectedOption" (change)="onRecipeChanged()">
+                <option *ngFor="let o of availableRecipes" 
+                    [value]="o.value">
+                    {{o.name}}
+                </option>
+            </select> 
+        </div>
+        
+        <div class = "assembler-indicator">
+            <div *ngIf="!activeRecipe" class = 'red indicator'></div>
+            <div *ngIf="activeRecipe && !assembler.running" class = 'yellow indicator'></div>
+            <div *ngIf="activeRecipe && assembler.running" class = 'green indicator'></div>
+        </div>
 
-    .required-resource { 
-        padding: 0.25rem;
-    }
-    .green {
-        background: green;
-    }
+    </div>
 
-    .yellow {
-        background: yellow;
-    }
-    .red {
-        background: red;
-    }
-    .assembler-progress-bar {
-        height: 12px;
-        width: 350px;
-        margin-left: 20px;
-        margin-right: 20px;
-        margin-top: 10px;
-    }
+    
+    <div *ngIf = "activeRecipe" class = "assembler-container-bottom">
 
-    .indicator { 
-        height: 18px;
-        width: 18px;
-        border-radius: 50%;
-        display: inline-block; 
-        position: absolute;
-        top: 25;
-        right: 125px;
-    }
-
-    .loop { 
-
-    }
-
-    .progress-section { 
-        display: flex;
-        flex-direction: row;
-    }
-
-    .assembler-transfer-button { 
-        margin-right: 10px;
-    }
-
-</style>
-
-<div class='ass-root'>
-
-    <select [(ngModel)]="selectedOption" (change)="onRecipeChanged()">
-        <option *ngFor="let o of availableRecipes" 
-            [value]="o.value">
-            {{o.name}}
-        </option>
-    </select> 
-
-    <span *ngIf="!activeRecipe" class = 'red indicator'></span>
-    <span *ngIf="activeRecipe && !assembler.running" class = 'yellow indicator'></span>
-    <span *ngIf="activeRecipe && assembler.running" class = 'green indicator'></span>
-
-    <mat-checkbox class = 'loop'  [(ngModel)]="loop">Loop</mat-checkbox>
-
-    <div *ngIf = "activeRecipe" class = "progress-section">
         <div class = 'required-resources'>
             <div class = 'required-resource' *ngFor = "let ingredient of activeRecipe.requiredResources">
                 <button (click) = "transferRequiredResource(ingredient.resourceType)">{{ getAvailableResourceCount(ingredient.resourceType)}}</button>
             </div>
         </div>
-        <div>
+      
+        <div class = "assembler-progress-section">
             <mat-progress-bar class = "assembler-progress-bar" mode="determinate" [value]="assemblerProgress()"></mat-progress-bar>
         </div>
 
         <div class = 'assembler-resource-output'>
-            <button class = 'assembler-transfer-button' (click) = "pushOutputToSource()"><</button>
-            <span>{{outputCount}}</span>
+            <button class = 'assembler-transfer-button' (click) = "pushOutputToSource()">{{outputCount}}</button>
         </div>
+
     </div>
 
-    <button (click)="startAssembler()">Start</button>
 </div>

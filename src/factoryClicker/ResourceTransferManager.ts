@@ -57,8 +57,14 @@ export class ResourceTransferManager {
     return false;
   }
 
-  returnResource(resourceType: ResourceType, amount: number) {
-    this.resourceContainer[resourceType].count += amount;
+  returnResource(resourceType: ResourceType, amount: number): number {
+    let amountToAdd = amount;
+    const amountAfterAdding = this.resourceContainer[resourceType].count + amountToAdd;
+    if (amountAfterAdding > this.resourceContainer[resourceType].max) { 
+      amountToAdd = this.resourceContainer[resourceType].max - this.resourceContainer[resourceType].count;
+    }
+    this.resourceContainer[resourceType].count += amountToAdd;
+    return amountToAdd;
   }
 
   satisfiesRecipe(recipe: Recipe): boolean {
@@ -87,7 +93,6 @@ export class ResourceTransferManager {
   }
 
   getFromSource(resourceType: ResourceType, amount: number): ResourceQuery { 
-
     let amountFetched: number = 0;  
     if (this.resourceContainer[resourceType].count >= amount){
       this.resourceContainer[resourceType].count -= amount;
@@ -96,7 +101,7 @@ export class ResourceTransferManager {
     return resourceQuery(resourceType, amountFetched);
   }
 
-  sendToSource(result: ReceipeResult) {
-    this.resourceContainer[result.resourceType].count += result.count;
+  sendToSource(result: ReceipeResult): number {
+    return this.returnResource(result.resourceType, result.count)
   }
 }

@@ -5,11 +5,32 @@ import { AppRoutingModule } from './app-routing.module';
 import { declarations } from './app.declarations';
 import { imports } from './app.imports'
 import { providers } from './app.providers';
-import { MinerComponent } from './miner/miner.component'
+import { MinerComponent } from './miner/miner.component';
+import { LoginScreenComponent } from './login-screen/login-screen.component'
+import { HttpClientModule } from '@angular/common/http';
+import { JwtModule } from '@auth0/angular-jwt';
+import {MatButtonModule} from '@angular/material/button';
+
+
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 @NgModule({
-  declarations: [...declarations, AppComponent, MinerComponent],
-  imports : [...imports, AppRoutingModule],
+  declarations: [...declarations, AppComponent, MinerComponent, LoginScreenComponent],
+  imports : [...imports, 
+    AppRoutingModule, 
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: [],
+        disallowedRoutes: [],
+      },
+    }),
+    MatButtonModule
+
+  ],
   providers: [...providers, AppService],
   bootstrap: [AppComponent],
 })

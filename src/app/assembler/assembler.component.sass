@@ -1,0 +1,71 @@
+.assembler-container
+    background: grey
+    border: 3px solid black
+    position: relative
+    width: 300px 
+    display: flex
+    flex-direction: column
+    margin-top: 10px
+    
+    .assembler-container-top
+        background: #444
+        height: 35px
+        display: flex
+        flex-direction: row
+
+        .assembler-select  
+            padding-left: 10px
+            width: 87%
+            select 
+                margin-top: 8px
+                option
+
+        div.assembler-indicator
+            width: 13%
+            .indicator
+                margin-top: 15%
+                margin-left: 15%
+                width: 70%
+                height: 70%
+                border-radius: 50%
+                display: inline-block
+
+    .assembler-container-bottom
+
+        height: 35px
+        display: flex
+        flex-direction: row
+        border-top: 1px solid black
+
+        .required-resources 
+            display: flex
+            flex-direction: row
+            .required-resource 
+                padding: 0.25rem
+
+        .assembler-progress-section
+            width: 80% 
+            padding-top: 10px
+            padding-right: 5px
+            padding-left: 5px
+            .assembler-progress-bar 
+                height: 15px
+                border-radius: 5%
+
+        .assembler-resource-output
+            width: 10%
+            padding-left: 2%
+            padding-top: 2%
+            button
+
+.green 
+    background: green
+
+.yellow 
+    background: yellow
+
+.red 
+    background: red
+
+.blue 
+    background: blue

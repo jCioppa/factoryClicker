@@ -1,10 +1,32 @@
 <div class = "smelter-component">
-    <select [(ngModel)]="selectedResourceType">
-        <option *ngFor="let o of dropdownOptions" [value] = "o.resourceType">{{o.displayName}}</option>
-    </select>
-    
-    <p>Progress: {{smelter.progress}}</p>
-    <progress [max]="smelter.duration" [value]="smelter.progress"> </progress>
-    <button (click)="startSmelter()">Start</button>
+    <div class = "smelter-component-top"> 
+        <div class = "smelter-recipe-select">
+            <select [(ngModel)]="selectedResourceType" (change)="onRecipeSelectionChanged()">
+                <option *ngFor="let o of dropdownOptions" [value] = "o.resourceType">{{o.displayName}}</option>
+            </select>
+        </div>
+        <div class = "smelter-indicator">
+            <span *ngIf="!activeRecipe" class = 'red indicator'></span>
+            <span *ngIf="activeRecipe && !smelter.running" class = 'yellow indicator'></span>
+            <span *ngIf="activeRecipe && smelter.running" class = 'green indicator'></span>
+        </div>
+    </div>
+
+
+    <div *ngIf = "recipeSet && activeRecipe && smelter" class = "smelter-component-bottom">
+        <div class = "smelter-recipe-resources">
+            <div *ngFor = "let resource of activeRecipe.requiredResources" class = "required-resource">
+                <button (click) = "onAddRequiredResource(resource.resourceType)">
+                    {{smelter.requiredResourceStore[resource.resourceType].count}}
+                </button>
+            </div>
+        </div>
+        <div class = "smelter-component-progress">
+            <mat-progress-bar class = 'smelter-progress-bar' mode="determinate" [value]="smelter.normalizedProgress"></mat-progress-bar>
+        </div>
+        <div class = "smelter-component-flush">
+            <button (click)="flushOuput()">{{outputCount}}</button>
+        </div>
+    </div>
 </div>
 

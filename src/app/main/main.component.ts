@@ -51,44 +51,52 @@ export class MainComponent implements OnInit {
   public resourceInventory: any = {
     [ResourceType.CopperOre]: {
       count: 0,
+      max: 50
     },
 
     [ResourceType.IronOre]: {
       count: 0,
+      max: 50
     },
 
     [ResourceType.Stone]: {
       count: 0,
+      max: 50
     },
 
     [ResourceType.Coal]: {
       count: 0,
+      max: 50
     },
 
     [ResourceType.Copper]: {
       count: 0,
+      max: 50
     },
-
     [ResourceType.Iron]: {
       count: 0,
+      max: 50
     },
-
     [ResourceType.Steel]: {
       count: 0,
+      max: 50
     },
-
     [ResourceType.StoneBricks]: {
       count: 0,
+      max: 50
     },
-    [ResourceType.IronGear]: {
+    [ResourceType.IronGear]:{
       count: 0,
+      max: 50
     },
     [ResourceType.CopperWire]: {
       count: 0,
+      max: 50
     },
 
     [ResourceType.RedScience]: {
       count: 0,
+      max: 50
     },
   };
 
