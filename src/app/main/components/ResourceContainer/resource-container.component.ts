@@ -14,10 +14,10 @@ export class ResourceContainerComponent implements OnInit {
   @Input() public inventory?: ResourceInventory;  
   @Output() onClick = new EventEmitter<ResourceType>();
 
+  imageSource: string = ''
   normalizedProgress: number = 0;
   resourceCount: number = 0;
   resourceLimit: number = 0;
-
 
   canClickResource: boolean = true;
 
@@ -29,7 +29,13 @@ export class ResourceContainerComponent implements OnInit {
     }
   }
 
+  setImageSourcePath() { 
+    // NOTE(josel): this should dispatch over the resource type
+    this.imageSource = 'assets/images/coal.png'; 
+  }
+
   ngOnInit(): void {
+    this.setImageSourcePath();
     this.updateInventorySetting();
     this.inventory?.register((event: InventoryChangeEvent) => { 
       if (event.resourceType == this.resourceType) { 
