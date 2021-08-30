@@ -1,7 +1,7 @@
 <div class = "resource-container">
     <div class = "resource-container-left">
         <div class = "resource-title">
-            <span>{{displayName}}: {{resourceSource.count}} / {{resourceSource.max}}</span>
+            <span>{{displayName}}: {{resourceCount}} / {{resourceLimit}}</span>
         </div>    
         <div class = "resource-amount-display">
             <mat-progress-bar class = 'resource-progress' mode="determinate" [value]="normalizedProgress"></mat-progress-bar>

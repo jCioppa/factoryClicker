@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from 'src/factoryClicker/Recipe';
-import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ResourceInventory } from 'src/factoryClicker/ResourceInventory';
+import {  ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
 import { CommandService } from '../services/CommandService';
 import { RecipeService } from '../services/RecipeService';
@@ -9,6 +10,11 @@ import { RecipeService } from '../services/RecipeService';
 interface RecipeOptionInfo {
   value: ResourceType;
   name: string;
+}
+
+
+const min = (a:number, b:number):number => { 
+  return (a <= b) ? a : b;
 }
 
 @Component({
@@ -48,57 +54,7 @@ export class MainComponent implements OnInit {
     },
   ];
 
-  public resourceInventory: any = {
-    [ResourceType.CopperOre]: {
-      count: 0,
-      max: 50
-    },
-
-    [ResourceType.IronOre]: {
-      count: 0,
-      max: 50
-    },
-
-    [ResourceType.Stone]: {
-      count: 0,
-      max: 50
-    },
-
-    [ResourceType.Coal]: {
-      count: 0,
-      max: 50
-    },
-
-    [ResourceType.Copper]: {
-      count: 0,
-      max: 50
-    },
-    [ResourceType.Iron]: {
-      count: 0,
-      max: 50
-    },
-    [ResourceType.Steel]: {
-      count: 0,
-      max: 50
-    },
-    [ResourceType.StoneBricks]: {
-      count: 0,
-      max: 50
-    },
-    [ResourceType.IronGear]:{
-      count: 0,
-      max: 50
-    },
-    [ResourceType.CopperWire]: {
-      count: 0,
-      max: 50
-    },
-
-    [ResourceType.RedScience]: {
-      count: 0,
-      max: 50
-    },
-  };
+  public resourceInventory: ResourceInventory = new ResourceInventory()
 
   public resourceTransferer: ResourceTransferManager =
     new ResourceTransferManager(this.resourceInventory);
@@ -207,27 +163,14 @@ export class MainComponent implements OnInit {
 
       switch (option) { 
         case 'fill': { 
-          for (let key in this.resourceInventory) { 
-            this.resourceInventory[key].count = 1000;
-          } 
+           this.resourceInventory.fill()
           break; 
-        } 
-        case 'empty': { 
-          for (let key in this.resourceInventory) { 
-            this.resourceInventory[key].count = 0;
-          }  
-          break;
-        }
+        }        
         default: { 
-          alert(1)
+          
         }
       }
-    
    })
-
-
-    
-
   }
 
   ngOnInit(): void {}
@@ -238,13 +181,13 @@ export class MainComponent implements OnInit {
     const recipe: Recipe = this.recipeService.findRecipe(resourceType);
 
     if (recipe) {
-      if (this.canSatisfyRecipe(recipe)) {
-        this.processResources(recipe);
+      if (this.ableToBuildRecipe(recipe)) {
+        this.buildRecipe(recipe);
       } else {
         clickValid = false;
       }
     } else {
-      this.resourceInventory[resourceType].count += this.increment;
+      this.resourceInventory.add(resourceType, this.increment)
     }
 
     if (clickValid) {
@@ -257,26 +200,23 @@ export class MainComponent implements OnInit {
     }
   }
 
-  canSatisfyRecipe(recipe: Recipe): boolean {
+  ableToBuildRecipe(recipe: Recipe): boolean {
     for (const requiredResource of recipe.requiredResources) {
-      const requiredAmount = requiredResource.count;
-      const requiredResourceType = requiredResource.resourceType;
-      const ownedResourceAmount =
-        this.resourceInventory[requiredResourceType].count;
-      if (ownedResourceAmount < requiredAmount) {
+      if (!this.resourceInventory.ableToRemove(requiredResource.resourceType, requiredResource.count)) {
         return false;
       }
     }
     return true;
   }
 
-  processResources(recipe: Recipe) {
-    for (const requiredResource of recipe.requiredResources) {
-      const requiredAmount = requiredResource.count;
-      const requiredResourceType = requiredResource.resourceType;
-      this.resourceInventory[requiredResourceType].count -= requiredAmount;
+  buildRecipe(recipe: Recipe) {
+    if (this.resourceInventory.ableToAdd(recipe.output.resourceType, recipe.output.count)) {
+      for (const requiredResource of recipe.requiredResources) {
+        const requiredAmount = requiredResource.count;
+        const requiredResourceType = requiredResource.resourceType;
+        this.resourceInventory.remove(requiredResourceType, requiredAmount)
+      }
+      this.resourceInventory.add(recipe.output.resourceType, recipe.output.count)
     }
-    this.resourceInventory[recipe.output.resourceType].count +=
-      recipe.output.count;
   }
 }

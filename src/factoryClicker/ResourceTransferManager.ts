@@ -1,12 +1,6 @@
-import { Recipe } from './Recipe';
 import { ReceipeResult } from './RecipeResult';
-import { RequiredResourceInfo } from './RequiredResourceInfo';
+import { ResourceInventory } from './ResourceInventory';
 import { ResourceType } from './ResourceType';
-
-interface ResourceSource {
-    resourceType: ResourceType; 
-    count: number;
-}
 
 export interface ResourceQuery { 
   resourceType: ResourceType; 
@@ -15,89 +9,28 @@ export interface ResourceQuery {
 
 export const resourceQuery  = (resourceType: ResourceType, count: number ): ResourceQuery => ({resourceType, count})
 
-class ResourcePipe { 
-    
-    private from: ResourceSource;
-    private to: ResourceSource;
-
-    constructor(from: ResourceSource, to: ResourceSource) { 
-      this.from = from;
-      this.to = to;
-    }
-
-    pushTo(amount: number) {
-      if (this.from.count >= amount) {
-        this.from.count -= amount;
-        this.to.count += amount;
-      }
-    }
-
-    pullFrom(amount: number) {
-      if (this.to.count >= amount) {
-        this.to.count -= amount;
-        this.from.count += amount;
-      }
-    }
-
-}
-
 export class ResourceTransferManager {
-  public resourceContainer: any;
-  public inventoryPipe?: ResourcePipe;
+  public resourceContainer: ResourceInventory;
 
-  constructor(resourceContainer: any) {
+  constructor(resourceContainer: ResourceInventory) {
     this.resourceContainer = resourceContainer;
   }
 
   tryTransferResource(resourceType: ResourceType, amount: number): boolean {
-    if (this.resourceContainer[resourceType].count >= amount) {
-      this.resourceContainer[resourceType].count -= amount;
+    if (this.resourceContainer.ableToRemove(resourceType, amount)) { 
+      this.resourceContainer.remove(resourceType, amount);
       return true;
-    }
+    }    
     return false;
   }
 
   returnResource(resourceType: ResourceType, amount: number): number {
-    let amountToAdd = amount;
-    const amountAfterAdding = this.resourceContainer[resourceType].count + amountToAdd;
-    if (amountAfterAdding > this.resourceContainer[resourceType].max) { 
-      amountToAdd = this.resourceContainer[resourceType].max - this.resourceContainer[resourceType].count;
-    }
-    this.resourceContainer[resourceType].count += amountToAdd;
-    return amountToAdd;
-  }
-
-  satisfiesRecipe(recipe: Recipe): boolean {
-    for (let requiredResource of recipe.requiredResources) {
-      const resourceRequirement = requiredResource.count;
-      const availableResources =
-        this.resourceContainer[requiredResource.resourceType].count;
-      if (availableResources < resourceRequirement) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  transferRequiredRecipeResources(recipe: Recipe): Array<RequiredResourceInfo> {
-    let resources: Array<RequiredResourceInfo> = [];
-    
-    for (let requiredResource of recipe.requiredResources) {
-      const resourceRequirement = requiredResource.count;
-      this.resourceContainer[requiredResource.resourceType].count -=
-        resourceRequirement;
-      resources.push({ ...requiredResource });
-    }
-    
-    return resources;
+    const result = this.resourceContainer.add(resourceType, amount);
+    return result.added;
   }
 
   getFromSource(resourceType: ResourceType, amount: number): ResourceQuery { 
-    let amountFetched: number = 0;  
-    if (this.resourceContainer[resourceType].count >= amount){
-      this.resourceContainer[resourceType].count -= amount;
-      amountFetched = amount;
-    }
+    const amountFetched = this.resourceContainer.remove(resourceType, amount);
     return resourceQuery(resourceType, amountFetched);
   }
 

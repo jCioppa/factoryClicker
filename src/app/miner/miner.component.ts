@@ -1,8 +1,122 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MinerState, MinerStateChange } from 'src/factoryClicker/MinerState';
+import { Recipe } from 'src/factoryClicker/Recipe';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { LoggerService } from '../logger/logger.service';
 import { RecipeService } from '../services/RecipeService';
+
+
+
+const assert = (object: any, message: string) => { 
+  if (!object) { 
+    throw new Error(message);
+  }
+}
+
+export class Miner {
+
+  normalizedPower: number = 0;
+  normalizedProgress: number = 0;
+  recipe?: Recipe;
+  progress: number = 0;
+  running: boolean = false;
+  blocked: boolean = false;
+  coalBuffer: any = { count: 0, max: 10 }
+
+  maxPower: number = 10;
+  power: number = 0;   
+  powerPerCoal: number = 10;
+
+  outputBuffer: any = {
+    count: 0,
+    max: 50
+  }
+
+  loop: boolean= true;
+  state?: MinerState;
+
+  logger: LoggerService;
+
+  constructor(logger: LoggerService) { 
+    this.logger = logger;
+  }
+
+  updateProgress() { 
+    if (this.recipe){
+      this.progress += 0.1;
+      this.normalizedProgress = (this.progress / this.recipe?.duration) * 100;
+    }
+  }
+
+  restart() {
+
+  }
+
+  ableToBuildRecipe(recipe: Recipe) : boolean { 
+    return false;
+  }
+
+  completeRecipe() { 
+    if (this.recipe) { 
+      this.outputBuffer.count = Math.min( this.outputBuffer.count + this.recipe.output.count, this.outputBuffer.max)
+      this.progress = 0;
+      this.normalizedProgress = 0;
+    }
+  }
+
+  updatePower() { 
+    if (this.recipe){
+      this.power = Math.max(this.power - 0.05, 0)
+      this.normalizedPower = (this.power / this.maxPower) * 100;
+    }
+  }
+
+  hasCompletedRecipe() { 
+    return this.recipe && (this.progress > this.recipe?.duration);          
+  }
+
+  getAllOutput(): any {
+    const result = {
+      resourceType: this.recipe?.output.resourceType,
+      count: this.outputBuffer.count
+    }
+    this.outputBuffer.count = 0;
+    return result;
+  }
+
+  start() {
+    if (!this.running || !this.state) {
+      this.running = true;
+      this.state = new MinerState(this, 10, {
+          progressPerTick: 0.1,
+          updateRate: 20
+        }, this.logger);
+      }
+    return this.state.start()
+  } 
+
+  setRecipe(recipe: Recipe) { 
+    this.recipe = recipe;
+  }
+
+  stop() {
+    this.running = false;
+  }
+
+  addCoal(amount: number) {
+      this.coalBuffer.count = Math.min(this.coalBuffer.count + amount, this.coalBuffer.max)
+  }
+
+  consumeFuel(): void {
+    if (this.power <= 0 && this.coalBuffer.count > 0) { 
+        this.coalBuffer.count -= 1;
+        this.power += this.powerPerCoal;
+    }
+    this.normalizedPower = 100 * (this.power / this.maxPower);
+  }
+}
 
 @Component({
   selector: 'Miner',
@@ -10,19 +124,12 @@ import { RecipeService } from '../services/RecipeService';
   styleUrls: ['./miner.component.sass'],
 })
 export class MinerComponent implements OnInit {
-  @Input() currentSelection?: ResourceType;
+  
   @Input() resourceTransferer?: ResourceTransferManager;
-
-  progress: number = 0;
-  coalCount: number = 0;
-  outputCount: number = 0;
-  outputLimit: number = 50;
-  smeltingHandle: any = null;
+  currentSelection: ResourceType = ResourceType.None;
   loop: boolean = true;
-  miningSpeed: number = 0.05;
-  activeRecipe: any = null;
-
-  running: boolean = false;
+  miner: Miner;
+  displayDebug: boolean = false;
 
   dropdownOptions: Array<any> = [
     {
@@ -46,76 +153,38 @@ export class MinerComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private logger: LoggerService
-  ) {}
-
-  onRecipeSelectionChanged(event: any) {
-    const selectedOption = this.currentSelection ?? ResourceType.None;
-    this.activeRecipe = this.recipeService.findMiningRecipe(selectedOption);
-    if (this.activeRecipe) {
-      this.tryStartMining(this.activeRecipe);
-    } 
+  ) {
+    this.miner = new Miner(logger)
   }
 
-  minerProgress(): number {
-    if (this.activeRecipe) {
-      return 100 * (this.progress / this.activeRecipe.duration);
+  onRecipeSelectionChanged(event: any) {
+    // parse recipe from dropdown
+    const selectedOption = this.currentSelection ?? ResourceType.None;
+    const newRecipe = this.recipeService.findMiningRecipe(selectedOption);
+    if (newRecipe) { 
+      this.miner.setRecipe(newRecipe);
+      const observable: any = this.miner.start();
+      if (observable) { 
+        observable.subscribe((event: MinerStateChange) => { 
+        })
+      }
     }
-    return 0;
   }
 
   transferCoal() {
     if (this.resourceTransferer?.tryTransferResource(ResourceType.Coal, 1)) {
-      this.coalCount++;
-      if (this.activeRecipe) {
-        this.tryStartMining(this.activeRecipe);
-      }
+      this.miner.addCoal(1)
+      this.miner.start();
     } 
   }
 
-  isRunning(): boolean {
-    return this.smeltingHandle !== null;
-  }
-
-  tryStartMining(recipe: any) {
-    if (!this.isRunning()) {
-      if (this.coalCount > 0) {
-        if (this.outputCount < this.outputLimit) {
-          this.coalCount--;
-          this.smeltingHandle = setInterval(() => {
-            this.tick(recipe);
-          }, 10);
-        } 
-      } 
-    } 
-  }
-
-  // returns the built resources back to the resource owner, via the resource transferer
   transferOutput() {
-    if (this.outputCount > 0) {
-      const selectedOption = this.currentSelection ?? ResourceType.None;
-      if (selectedOption !== ResourceType.None && this.resourceTransferer) {
-        this.resourceTransferer.returnResource(
-          selectedOption,
-          this.outputCount
-        );
-        this.outputCount = 0;
-      }
-    } 
-  }
-
-  tick(recipe: any) {
-    this.progress += this.miningSpeed;
-    if (this.progress > recipe.duration) {
-      this.outputCount += recipe.output.count;
-      clearInterval(this.smeltingHandle);
-      this.smeltingHandle = null;
-      this.progress = 0;
-
-      if (this.loop) {
-        this.tryStartMining(recipe);
-      }
+    // remove all produced resources from miner
+    const {resourceType, count} = this.miner.getAllOutput();
+    if (this.resourceTransferer) {
+      this.resourceTransferer.returnResource(resourceType, count);
     }
   }
-
+  
   ngOnInit(): void {}
 }

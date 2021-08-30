@@ -37,4 +37,10 @@
 
     </div>
 
+    <div *ngIf="debug && assembler && assembler.state">
+        <div>updateRate: {{assembler.state.updateRate}}</div>
+        <div>state: {{getAssemblerState()}}</div>
+
+    </div>
+
 </div>

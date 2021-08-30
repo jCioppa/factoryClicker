@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InventoryChangeEvent, ResourceInventory } from 'src/factoryClicker/ResourceInventory';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 
 @Component({
@@ -10,15 +11,41 @@ export class ResourceContainerComponent implements OnInit {
 
   @Input() public resourceType?: ResourceType;
   @Input() public displayName?: string;
-  @Input() public resourceSource?: any;
-  @Input() normalizedProgress: number = 0;
+  @Input() public inventory?: ResourceInventory;  
   @Output() onClick = new EventEmitter<ResourceType>();
+
+  normalizedProgress: number = 0;
+  resourceCount: number = 0;
+  resourceLimit: number = 0;
+
 
   canClickResource: boolean = true;
 
-  ngOnInit(): void {}
+  updateInventorySetting() { 
+    if (this.resourceType && this.inventory) { 
+      this.resourceCount = this.inventory?.resourceCount(this.resourceType);
+      this.resourceLimit = this.inventory?.resourceLimit(this.resourceType);
+      this.normalizedProgress = (this.resourceCount / this.resourceLimit) * 100;
+    }
+  }
+
+  ngOnInit(): void {
+    this.updateInventorySetting();
+    this.inventory?.register((event: InventoryChangeEvent) => { 
+      if (event.resourceType == this.resourceType) { 
+          this.updateInventorySetting()
+      }
+    })
+  }
+
+  ngOnDestroy(): void { 
+   
+  }
 
   onClickResource(): void {
-    this.onClick.emit(this.resourceType);
+    if (this.resourceType && this.inventory) { 
+      this.onClick.emit(this.resourceType);
+      this.updateInventorySetting();
+    }
   }
 }

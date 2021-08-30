@@ -53,6 +53,8 @@
         .miner-progress-bar
             height: 15px
             border-radius: 5%
+
+           
             
     .miner-resource-output 
         width: 10%
@@ -60,7 +62,16 @@
         padding-top: 2%
         button
 
+.miner-power-progress-bar
+    ::ng-deep .mat-progress-bar-fill::after 
+        background-color: yellow
 
+    ::ng-deep .mat-progress-bar-buffer 
+        background: brown
+
+    ::ng-deep .mat-progress-bar 
+        border-radius: 2px
+        
 .loop 
     width: 20px
     height: 20px
@@ -78,3 +89,5 @@
     background: blue
 
     
+.debug
+    font-size: 10px

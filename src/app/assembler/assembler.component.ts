@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Assembler } from 'src/factoryClicker/Assembler';
 import { Recipe } from 'src/factoryClicker/Recipe';
 import { ReceipeResult } from 'src/factoryClicker/RecipeResult';
-import { ResourceQuery, ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import {  ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
 import { LoggerService } from '../logger/logger.service';
 import { CommandService } from '../services/CommandService';
@@ -22,10 +22,11 @@ interface RecipeOptionInfo {
 export class AssemblerComponent implements OnInit, OnDestroy {
   @Input() inventoryPipe?: ResourceTransferManager;
 
+  debug: boolean = false;
   assembler: Assembler = new Assembler();
   activeRecipe?: Recipe;
   selectedOption?: ResourceType;
-  
+  listener?: Subscription;
   recipeSet: boolean = false;
   duration: number = 0;
   progress: number = 0;
@@ -58,8 +59,7 @@ export class AssemblerComponent implements OnInit, OnDestroy {
     private logger: LoggerService,
     private commandService: CommandService,
     private recipeService: RecipeService
-  ) {
-      
+  ) {      
   }
 
   pushOutputToSource() { 
@@ -75,7 +75,7 @@ export class AssemblerComponent implements OnInit, OnDestroy {
       this.activeRecipe = this.recipeService.findRecipe(this.selectedOption); 
       if (this.activeRecipe) {
         this.recipeSet = true;
-        this.assembler.initializeInventory(this.activeRecipe);
+        this.assembler.initializeInventory(this.activeRecipe); 
       } else { 
         this.recipeSet = false;
       }
@@ -92,26 +92,18 @@ export class AssemblerComponent implements OnInit, OnDestroy {
     return result ?? 0;
   }
 
-  assemblerCallbacks = {
-    // called when a recipe is complete
-    next: (result: ReceipeResult) => this.onRecipeComplete(result),
-
-    // called when a recipe is complete and we're not able to build another recipe
-    complete: () => this.onAssemblingComplete(),
-
-    // called on error
-    error: (err: any) => this.onAssemblingError(err)
-  };
-
-  listener?: Subscription;
 
   startAssembler(): void {
     if (this.recipeSet &&  this.activeRecipe && this.inventoryPipe) {
       const observable = this.assembler.startAssembling(this.activeRecipe, this.loop);
       if (observable) { 
-        this.listener = observable.subscribe(this.assemblerCallbacks)
+        this.listener = observable.subscribe((result: ReceipeResult) => this.onRecipeComplete(result), (err: any) => this.onAssemblingError(err), () => this.onAssemblingComplete())
       }
     }
+  }
+
+  getAssemblerState() { 
+    return this.assembler.state?.currentState.toString()
   }
 
   onRecipeComplete(result: ReceipeResult) { 
@@ -131,6 +123,7 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   transferRequiredResource(resourceType: ResourceType) {
     const result: any = this.inventoryPipe?.getFromSource(resourceType, 1);
     this.assembler.addToStore(result);
+    this.startAssembler()
   }
 
   ngOnDestroy(): void {
@@ -138,4 +131,5 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
+
 }

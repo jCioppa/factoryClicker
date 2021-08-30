@@ -1,17 +1,17 @@
-import { Observable } from 'rxjs';
+import {  Observable } from 'rxjs';
+import { AssemblerState } from './AssemblerState';
 import { Recipe } from './Recipe';
 import { ReceipeResult } from './RecipeResult';
-import { ResourceQuery, ResourceTransferManager } from './ResourceTransferManager';
+import { ResourceQuery } from './ResourceTransferManager';
 
 export class Assembler {
+  
   recipe?: Recipe;
   progress: number = 0;
   running: boolean = false;
-
-  requiredResourceStore: any = {
-
-  }
-
+  state?: AssemblerState;
+  requiredResourceStore: any = {}
+ 
   addToStore(query: ResourceQuery) { 
     if (!this.requiredResourceStore[query.resourceType]) {
       this.requiredResourceStore[query.resourceType] = {count: 0}
@@ -20,9 +20,9 @@ export class Assembler {
   }
 
   initializeInventory(newRecipe: Recipe) { 
-      for (const resource of newRecipe.requiredResources) { 
-         this.requiredResourceStore[resource.resourceType] = { count: 0 }
-      }
+    for (const resource of newRecipe.requiredResources) { 
+        this.requiredResourceStore[resource.resourceType] = { count: 0 }
+    }
   }
 
   ableToBuildRecipe(recipe: Recipe): boolean { 
@@ -40,32 +40,14 @@ export class Assembler {
     }
   }
 
-
   startAssembling(newRecipe: Recipe, shouldLoop: boolean): Observable<ReceipeResult> | null { 
     if (!this.isRunning() && this.ableToBuildRecipe(newRecipe)) {
       this.recipe = newRecipe;
-      this.restart()
-    
-      return new Observable((callbacks) => {   
-        try { 
-          const progressHandle = setInterval(() => {
-            this.tick((result: ReceipeResult) => {
-              callbacks.next(result)
-              if (this.recipe) { 
-                if (!this.ableToBuildRecipe(this.recipe) || !shouldLoop) { 
-                  this.stop();
-                  clearInterval(progressHandle);
-                  callbacks.complete()
-                } else { 
-                  this.restart()
-                }
-              }
-            });
-          }, 15);
-        } catch (err: any) { 
-          callbacks.error(err)
-        } 
-      });
+      this.state = new AssemblerState(this, 10, {
+          progressPerTick: 0.1,
+          updateRate: 20
+        });
+      return this.state.start()
     }
     return null
   }
@@ -78,6 +60,13 @@ export class Assembler {
     }
   }
 
+  hasCompletedRecipe(): boolean { 
+    if (this.recipe) { 
+      return this.progress >= this.recipe.duration;
+    }
+    return false;
+  }
+
   stop() {
     this.progress = 0;
     this.running = false;
@@ -85,14 +74,5 @@ export class Assembler {
 
   isRunning(): boolean {
     return this.running;
-  }
-
-  tick(onRecipeComplete: any): void {
-    if (this.recipe) {
-      this.progress += 0.1;
-      if (this.progress >= this.recipe.duration) {
-        onRecipeComplete(this.recipe.output)
-      }
-    }
   }
 }

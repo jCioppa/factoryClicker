@@ -2,15 +2,14 @@
     <div class = "resource-containers container-vert">
         <ResourceContainer *ngFor="let r of resourceContainers"
             (onClick) = "onClickResource($event)"
-            [normalizedProgress] = "(resourceInventory[r.resourceType].count / resourceInventory[r.resourceType].max) * 100"
             [resourceType] = "r.resourceType"
             [displayName] = "r.displayName"
-            [resourceSource] = "resourceInventory[r.resourceType]"
+            [inventory] = "resourceInventory"
         ></ResourceContainer>
     </div>
     
     <div class = "factory-root">
-    
+          
         <div class = "progress_bar">
             <mat-progress-bar mode="determinate" [value]="100 * (clickCount / expToNextLevel)"></mat-progress-bar>
         </div>

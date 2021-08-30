@@ -9,25 +9,36 @@
         </div>
 
         <div class="active-indicator">
-            <div *ngIf="!activeRecipe" class = 'red indicator'></div>
-            <div *ngIf="activeRecipe && !isRunning()" class = 'yellow indicator'></div>
-            <div *ngIf="activeRecipe && isRunning()" class = 'green indicator'></div>
+            <div *ngIf="!miner.recipe" class = 'red indicator'></div>
+            <div *ngIf="miner.recipe && !miner.running" class = 'yellow indicator'></div>
+            <div *ngIf="miner.recipe && miner.running" class = 'green indicator'></div>
         </div>
 
     </div>
 
-    <div class = 'miner-container-bottom' *ngIf = "activeRecipe">
+    <div class = 'miner-container-bottom' *ngIf = "miner && miner.recipe">
  
         <div class = "miner-coal-input">
-            <button  (click) = "transferCoal()">{{coalCount}}</button>
+            <button  (click) = "transferCoal()">{{miner.coalBuffer.count}}</button>
         </div>
         
         <div class = "miner-progress">
-            <mat-progress-bar class = 'miner-progress-bar' mode="determinate" [value]="minerProgress()"></mat-progress-bar>
+            <mat-progress-bar class = 'miner-progress-bar' mode="determinate" [value]="miner.normalizedProgress"></mat-progress-bar>
         </div>
         
         <div class = 'miner-resource-output'>
-            <button  class = 'transfer-button' (click) = "transferOutput()">{{outputCount}}</button>
+            <button class = 'transfer-button' (click) = "transferOutput()">{{miner.outputBuffer.count}}</button>
         </div>
+
+    </div>
+    <div class = 'miner-power-progress'>
+        <mat-progress-bar class = 'miner-power-progress-bar' mode="determinate" [value]="miner.normalizedPower"></mat-progress-bar>
+    </div>
+
+    <div  class = "debug" *ngIf = "displayDebug && miner && miner.recipe && miner.state">
+        <div>running: {{miner.running}}</div>
+        <div>progress: {{miner.progress}} / {{miner.recipe.duration}} [{{miner.normalizedProgress}}]</div>
+        <div>power: {{miner.power}} / {{miner.maxPower}} [{{miner.normalizedPower}}]</div>
+        <div>state: {{miner.state.currentState}} </div>
     </div>
 </div>

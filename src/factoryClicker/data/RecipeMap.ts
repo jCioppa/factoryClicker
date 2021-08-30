@@ -24,28 +24,28 @@ export const MinerRecipes = [
     'Coal',
     ResourceType.Coal,
     10,
-    [resourceEntry(ResourceType.Coal, 1)],
+    [],
     resourceEntry(ResourceType.Coal, 1)
   ),
   recipeEntry(
     'Iron Ore',
     ResourceType.IronOre,
     10,
-    [resourceEntry(ResourceType.Coal, 1)],
+    [],
     resourceEntry(ResourceType.IronOre, 1)
   ),
   recipeEntry(
     'Copper Ore',
     ResourceType.CopperOre,
     10,
-    [resourceEntry(ResourceType.Coal, 1)],
+    [],
     resourceEntry(ResourceType.CopperOre, 1)
   ),
   recipeEntry(
     'Stone',
     ResourceType.Stone,
     10,
-    [resourceEntry(ResourceType.Coal, 1)],
+    [],
     resourceEntry(ResourceType.Stone, 1)
   ),
 ];
@@ -79,8 +79,7 @@ export const RecipeMap: any = {
     duration: 10,
     output: resourceEntry(ResourceType.Iron, 1),
     requiredResources: [
-      resourceEntry(ResourceType.IronOre, 1),
-      resourceEntry(ResourceType.Coal, 1),
+      resourceEntry(ResourceType.IronOre, 1)
     ],
   },
 
@@ -89,8 +88,7 @@ export const RecipeMap: any = {
     duration: 10,
     output: resourceEntry(ResourceType.Copper, 1),
     requiredResources: [
-      resourceEntry(ResourceType.CopperOre, 1),
-      resourceEntry(ResourceType.Coal, 1),
+      resourceEntry(ResourceType.CopperOre, 1)
     ],
   },
 
@@ -99,8 +97,7 @@ export const RecipeMap: any = {
     duration: 10,
     output: resourceEntry(ResourceType.StoneBricks, 1),
     requiredResources: [
-      resourceEntry(ResourceType.Stone, 1),
-      resourceEntry(ResourceType.Coal, 1),
+      resourceEntry(ResourceType.Stone, 1)
     ],
   },
 
@@ -109,8 +106,7 @@ export const RecipeMap: any = {
     duration: 50,
     output: resourceEntry(ResourceType.Steel, 1),
     requiredResources: [
-      resourceEntry(ResourceType.Iron, 5),
-      resourceEntry(ResourceType.Coal, 1),
+      resourceEntry(ResourceType.Iron, 5)
     ],
   },
 
