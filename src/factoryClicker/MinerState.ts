@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { LoggerService } from "src/app/logger/logger.service";
-import { Miner } from "src/app/miner/miner.component";
+import { Miner } from "./Miner";
 
 export interface MinerStateChange {
 
@@ -85,14 +85,8 @@ export class MinerState {
           this.miner.consumeFuel();
 
           if (this.miner.hasCompletedRecipe()) { 
-
             this.miner.completeRecipe();
-            
-            if (!this.miner.loop) { 
-              this.changeState(MinerStateValues.Stopping);
-            } else { 
-              this.changeState(MinerStateValues.Restarting);
-            }
+            this.changeState(MinerStateValues.RecipeComplete);
           }
         }
       } break;

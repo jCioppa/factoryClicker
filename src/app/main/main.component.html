@@ -28,9 +28,7 @@
             <mat-tab label="Refining">
                 <div class = "container-vert">
                     <Smelter *ngFor = "let smelter of smelters"
-                        [resourceType] = 'smelter.selectedRecipe.resourceType'
                         [resourceTransferer] = "resourceTransferer"  
-                        [dropdownOptions] = "smelterDropdownOptions" 
                         displayName="smelter.selectedRecipe.displayName"     
                     ></Smelter>
                 </div>

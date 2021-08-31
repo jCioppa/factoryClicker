@@ -1,32 +1,50 @@
-<div class = "smelter-component">
-    <div class = "smelter-component-top"> 
+<div class = "smelter-container">   
+  
+    <div class = 'smelter-container-top'> 
+
         <div class = "smelter-recipe-select">
-            <select [(ngModel)]="selectedResourceType" (change)="onRecipeSelectionChanged()">
-                <option *ngFor="let o of dropdownOptions" [value] = "o.resourceType">{{o.displayName}}</option>
+            <select (change) = "onRecipeSelectionChanged()" [(ngModel)] = "selectedResourceType">
+                <option *ngFor = "let o of smelterDropdownOptions" [value] = "o.value">{{o.displayName}}</option>
             </select>
         </div>
-        <div class = "smelter-indicator">
-            <span *ngIf="!activeRecipe" class = 'red indicator'></span>
-            <span *ngIf="activeRecipe && !smelter.running" class = 'yellow indicator'></span>
-            <span *ngIf="activeRecipe && smelter.running" class = 'green indicator'></span>
+
+        <div class = "smelter-coal-input">
+            <button  (click) = "transferCoal()">{{smelter.coalBuffer.count}}</button>
         </div>
+        
+        <div class="active-indicator">
+            <div *ngIf="!smelter.recipe" class = 'red indicator'></div>
+            <div *ngIf="smelter.recipe && !smelter.running" class = 'yellow indicator'></div>
+            <div *ngIf="smelter.recipe && smelter.running" class = 'green indicator'></div>
+        </div>
+
     </div>
 
+    <div class = 'smelter-container-bottom' *ngIf = "smelter && smelter.recipe">
 
-    <div *ngIf = "recipeSet && activeRecipe && smelter" class = "smelter-component-bottom">
-        <div class = "smelter-recipe-resources">
-            <div *ngFor = "let resource of activeRecipe.requiredResources" class = "required-resource">
-                <button (click) = "onAddRequiredResource(resource.resourceType)">
-                    {{smelter.requiredResourceStore[resource.resourceType].count}}
-                </button>
+        <div class = 'required-resources'>
+            <div class = 'required-resource' *ngFor = "let ingredient of smelter.recipe.requiredResources">
+                <button (click) = "transferRequiredResource(ingredient.resourceType)">{{ getAvailableResourceCount(ingredient.resourceType)}}</button>
             </div>
         </div>
-        <div class = "smelter-component-progress">
+
+        <div class = "smelter-progress">
             <mat-progress-bar class = 'smelter-progress-bar' mode="determinate" [value]="smelter.normalizedProgress"></mat-progress-bar>
         </div>
-        <div class = "smelter-component-flush">
-            <button (click)="flushOuput()">{{outputCount}}</button>
+        
+        <div class = 'smelter-resource-output'>
+            <button class = 'transfer-button' (click) = "transferOutput()">{{smelter.outputBuffer.count}}</button>
         </div>
+        
+    </div>
+    <div class = 'smelter-power-progress'>
+        <mat-progress-bar class = 'smelter-power-progress-bar' mode="determinate" [value]="smelter.powerSource.normalizedPower"></mat-progress-bar>
+    </div>
+
+    <div  class = "debug" *ngIf = "displayDebug && smelter && smelter.recipe && state">
+        <div>running: {{smelter.running}}</div>
+        <div>progress: {{smelter.progress}} / {{smelter.recipe.duration}} [{{smelter.normalizedProgress}}]</div>
+        <div>power: {{smelter.powerSource.currentPower}} / {{smelter.powerSource.maxPower}} [{{smelter.powerSource.normalizedPower}}]</div>
+        <div>state: {{state.currentState}} </div>
     </div>
 </div>
-

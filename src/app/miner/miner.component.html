@@ -3,7 +3,7 @@
     <div class = 'miner-container-top'> 
 
         <div class = "miner-recipe-select">
-            <select (change) = "onRecipeSelectionChanged($event)" [(ngModel)] = "currentSelection">
+            <select (change) = "onRecipeSelectionChanged()" [(ngModel)] = "currentSelection">
                 <option *ngFor = "let o of dropdownOptions" [value] = "o.value">{{o.displayName}}</option>
             </select>
         </div>
@@ -17,7 +17,7 @@
     </div>
 
     <div class = 'miner-container-bottom' *ngIf = "miner && miner.recipe">
- 
+
         <div class = "miner-coal-input">
             <button  (click) = "transferCoal()">{{miner.coalBuffer.count}}</button>
         </div>
@@ -29,16 +29,16 @@
         <div class = 'miner-resource-output'>
             <button class = 'transfer-button' (click) = "transferOutput()">{{miner.outputBuffer.count}}</button>
         </div>
-
+        
     </div>
     <div class = 'miner-power-progress'>
         <mat-progress-bar class = 'miner-power-progress-bar' mode="determinate" [value]="miner.normalizedPower"></mat-progress-bar>
     </div>
 
-    <div  class = "debug" *ngIf = "displayDebug && miner && miner.recipe && miner.state">
+    <div  class = "debug" *ngIf = "displayDebug && miner && miner.recipe && state">
         <div>running: {{miner.running}}</div>
         <div>progress: {{miner.progress}} / {{miner.recipe.duration}} [{{miner.normalizedProgress}}]</div>
         <div>power: {{miner.power}} / {{miner.maxPower}} [{{miner.normalizedPower}}]</div>
-        <div>state: {{miner.state.currentState}} </div>
+        <div>state: {{state.currentState}} </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-.smelter-component
+.smelter-container
     background: grey
     border: 3px solid black
     position: relative
@@ -7,59 +7,73 @@
     flex-direction: column
     margin-top: 10px
 
-    .smelter-component-top
-        background: #444
-        height: 35px
-        display: flex
-        flex-direction: row
+.smelter-container-top
 
-        .smelter-recipe-select
-            padding-left: 10px
-            width: 87%
-            select 
-                margin-top: 8px
-                option
+    background: #444
+    height: 35px
+    display: flex
+    flex-direction: row
 
-        .smelter-indicator
-            width: 13%
-            .indicator
-                margin-top: 15%
-                margin-left: 15%
-                width: 70%
-                height: 70%
-                border-radius: 50%
-                display: inline-block
+    .smelter-recipe-select
+        padding-left: 10px
+        width: 87%
+        select 
+            margin-top: 8px
+            option
 
-    .smelter-component-bottom
+    .smelter-coal-input
+        width: 10%
+        padding-left: 2%
+        padding-top: 2%
+        button
 
-        height: 35px
-        display: flex
-        flex-direction: row
-        border-top: 1px solid black
+    .active-indicator
+        width: 13%
+        .indicator
+            margin-top: 15%
+            margin-left: 15%
+            width: 70%
+            height: 70%
+            border-radius: 50%
+            display: inline-block
 
-        .smelter-recipe-resources
-            padding-top: 6px
-            padding-left: 4px
-            display: flex            
-            flex-direction: row
-            .required-resource 
-                button
+.smelter-container-bottom 
+   
+    height: 35px
+    display: flex
+    flex-direction: row
+    border-top: 1px solid black
+
+    .smelter-progress
+     
+        width: 80% 
+        padding-top: 10px
+        padding-right: 5px
+        padding-left: 5px
         
-        .smelter-component-progress
-            width: 70% 
-            padding-top: 10px
-            padding-right: 5px
-            padding-left: 5px
-            .smelter-progress-bar
-                height: 15px
-                border-radius: 5%
+        .smelter-progress-bar
+            height: 15px
+            border-radius: 5%
+
+    .smelter-resource-output 
+        width: 10%
+        padding-left: 2%
+        padding-top: 2%
+        button
+
+.smelter-power-progress-bar
+    ::ng-deep .mat-progress-bar-fill::after 
+        background-color: yellow
+
+    ::ng-deep .mat-progress-bar-buffer 
+        background: brown
+
+    ::ng-deep .mat-progress-bar 
+        border-radius: 2px
         
-        .smelter-component-flush
-            width: 10%
-            padding-left: 2%
-            padding-top: 2%
-            button
-        
+.loop 
+    width: 20px
+    height: 20px
 
 .green 
     background: green
@@ -72,3 +86,7 @@
 
 .blue 
     background: blue
+
+    
+.debug
+    font-size: 10px
