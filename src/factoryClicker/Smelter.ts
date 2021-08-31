@@ -83,7 +83,7 @@ export class Smelter {
       }
     }
   
-    restart() {
+    startRecipe() {
   
     }
   

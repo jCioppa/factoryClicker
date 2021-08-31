@@ -61,7 +61,10 @@ export class MinerState {
       } break;
 
       case MinerStateValues.Idle: { 
-
+        this.miner.consumeFuel();
+        if (this.miner.power > 0) {
+          this.changeState(MinerStateValues.Running);
+        }
       } break;
 
        // @NextState (Running)

@@ -2,15 +2,10 @@ import { Observable } from "rxjs";
 import { LoggerService } from "src/app/logger/logger.service";
 import { Smelter } from "./Smelter";
 
-const assert = (value: any, msg: string) => { 
-  if (!value) { 
-    throw new Error(msg)
-  }
-}
-
 export interface SmelterStateChange {
 
 }
+
 enum SmelterStateValues { 
   Starting = "Starting",
   RecipeStarted = "RecipeStarted",
@@ -58,7 +53,10 @@ export class SmelterState {
     switch(this.currentState) {
 
       case SmelterStateValues.Idle: { 
-
+        this.smelter.consumeFuel();
+        if (!this.smelter.powerSource.empty()) { 
+          this.changeState(SmelterStateValues.Starting);        
+        }
       } break;
 
       case SmelterStateValues.Starting: {
@@ -71,12 +69,8 @@ export class SmelterState {
 
        // @NextState (Running)
       case SmelterStateValues.RecipeStarted: { 
-        this.smelter.restart();
-        if (this.smelter.running) { 
-          this.changeState(SmelterStateValues.Running);
-        } else { 
-          this.changeState(SmelterStateValues.Idle);
-        }
+        this.smelter.startRecipe();      
+        this.changeState(SmelterStateValues.Running);
       } break;
 
        // @NextState (Running | RecipeComplete)
@@ -84,7 +78,6 @@ export class SmelterState {
         if (this.smelter.powerSource.empty()) {
           this.changeState(SmelterStateValues.Idle);
         } else { 
-
           this.smelter.updateProgress();
           this.smelter.updatePower();
           this.smelter.consumeFuel();

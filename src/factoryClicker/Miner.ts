@@ -10,7 +10,6 @@ export class Miner {
     running: boolean = false;
     blocked: boolean = false;
     coalBuffer: any = { count: 0, max: 10 }
-  
     maxPower: number = 10;
     power: number = 0;   
     powerPerCoal: number = 10;
@@ -39,7 +38,14 @@ export class Miner {
     }
   
     ableToBuildRecipe(recipe: Recipe) : boolean { 
-      return false;
+      for (const resource of recipe.requiredResources) { 
+          const required = resource.count;
+          const available = this.outputBuffer[resource.resourceType].count;
+          if (required > available) { 
+              return false;
+          }
+      }        
+      return true;
     }
   
     completeRecipe() { 
