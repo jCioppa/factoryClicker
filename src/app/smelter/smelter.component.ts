@@ -1,7 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Recipe } from 'src/factoryClicker/Recipe';
-import { ReceipeResult } from 'src/factoryClicker/RecipeResult';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { Smelter } from 'src/factoryClicker/Smelter';

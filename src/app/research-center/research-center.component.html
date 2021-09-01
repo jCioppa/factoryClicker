@@ -1,0 +1,17 @@
+<div class = "research-center">
+
+    <div class = "research-progress-container">
+        <mat-progress-bar class = 'resource-progress' mode="determinate" [value]="lab.normalizedResearchProgress"></mat-progress-bar>
+    </div>
+
+    <div class = "research-slots-container">
+        <div class = "research-slot" *ngFor = "let slot of lab.researchSlots">
+            <button (click) = "onClickResearchSlot(slot)">
+                <div *ngIf = "slot.active">
+                    {{slot.resourceType}} [{{slot.count}} : {{slot.max}}]
+                </div>
+                <div *ngIf = "!slot.active">+</div>
+            </button>
+        </div>
+    </div>
+</div>

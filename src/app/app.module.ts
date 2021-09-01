@@ -10,6 +10,9 @@ import { LoginScreenComponent } from './login-screen/login-screen.component'
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import {MatButtonModule} from '@angular/material/button';
+import { ResearchCenterComponent } from './research-center/research-center.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 export function tokenGetter() {
@@ -17,10 +20,12 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [...declarations, AppComponent, MinerComponent, LoginScreenComponent],
+  declarations: [...declarations, AppComponent, MinerComponent, LoginScreenComponent, ResearchCenterComponent],
   imports : [...imports, 
     AppRoutingModule, 
     HttpClientModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

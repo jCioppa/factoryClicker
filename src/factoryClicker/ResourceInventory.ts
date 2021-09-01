@@ -22,7 +22,7 @@ export interface InventoryChangeEvent {
   
     onInventoryChanged : EventEmitter<InventoryChangeEvent> = new EventEmitter<InventoryChangeEvent>()
 
-    resourceInventoryContainer: {[resourceType: number]: ResourceInventorySlot} = {
+    resourceInventoryContainer: {[resourceType: string]: ResourceInventorySlot} = {
       [ResourceType.CopperOre]: {
         resourceType: ResourceType.CopperOre,
         count: 0,
@@ -69,7 +69,7 @@ export interface InventoryChangeEvent {
       },
       [ResourceType.StoneBricks]: {
         resourceType: ResourceType.StoneBricks,
-  
+
         count: 0,
         max: 50
       },

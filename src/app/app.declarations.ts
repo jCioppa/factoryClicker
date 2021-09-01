@@ -4,6 +4,7 @@ import { AssemblerComponent } from './assembler/assembler.component';
 import { SmelterComponent } from './smelter/smelter.component';
 import { ScienceLabComponent } from './science-lab/science-lab.component';
 import { ResourceContainerComponent } from './main/components/ResourceContainer/resource-container.component';
+import { ResourceSelectionDialogComponent } from './main/components/ResourceSelectionDialog/resource-selection-dialog.component';
 
 export const declarations = [
   LoggerComponent,
@@ -12,4 +13,5 @@ export const declarations = [
   SmelterComponent,
   ScienceLabComponent,
   ResourceContainerComponent,
+  ResourceSelectionDialogComponent
 ];

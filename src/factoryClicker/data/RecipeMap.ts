@@ -74,6 +74,15 @@ export const AssemblerRecipes = [
 ];
 
 export const RecipeMap: any = {
+  [ResourceType.Coal]: {
+    name: 'Coal',
+    duration: 10,
+    output: resourceEntry(ResourceType.Coal, 1),
+    requiredResources: [
+      
+    ],
+  },
+
   [ResourceType.Iron]: {
     name: 'Iron',
     duration: 10,

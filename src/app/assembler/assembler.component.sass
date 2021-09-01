@@ -1,6 +1,6 @@
 .assembler-container
-    background: grey
-    border: 3px solid black
+    background: black
+    border: 1px solid white
     position: relative
     width: 300px 
     display: flex
@@ -8,7 +8,7 @@
     margin-top: 10px
     
     .assembler-container-top
-        background: #444
+        background: black
         height: 35px
         display: flex
         flex-direction: row
@@ -32,16 +32,23 @@
 
     .assembler-container-bottom
 
+        background: black
+        border-top: 1px solid white
         height: 35px
         display: flex
         flex-direction: row
-        border-top: 1px solid black
 
         .required-resources 
             display: flex
             flex-direction: row
             .required-resource 
                 padding: 0.25rem
+                button
+                    border: 1px solid white
+                    background: black
+                    color: white
+                    border-radius: 0
+
 
         .assembler-progress-section
             width: 80% 
@@ -57,6 +64,10 @@
             padding-left: 2%
             padding-top: 2%
             button
+                border: 1px solid white
+                background: black
+                color: white
+                border-radius: 0
 
 .green 
     background: green

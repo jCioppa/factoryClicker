@@ -10,6 +10,7 @@ export interface ResourceQuery {
 export const resourceQuery  = (resourceType: ResourceType, count: number ): ResourceQuery => ({resourceType, count})
 
 export class ResourceTransferManager {
+
   public resourceContainer: ResourceInventory;
 
   constructor(resourceContainer: ResourceInventory) {

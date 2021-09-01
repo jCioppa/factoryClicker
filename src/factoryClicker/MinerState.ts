@@ -5,6 +5,7 @@ import { Miner } from "./Miner";
 export interface MinerStateChange {
 
 }
+
 enum MinerStateValues { 
   Starting = "Starting",
   RecipeStarted = "RecipeStarted",
@@ -15,7 +16,6 @@ enum MinerStateValues {
   Stopped = "Stopped",
   Idle = "Idle"
 }
-
 
 export class MinerState { 
   
@@ -82,7 +82,6 @@ export class MinerState {
         if (this.miner.power <= 0) {
           this.changeState(MinerStateValues.Idle);
         } else { 
-
           this.miner.updateProgress();
           this.miner.updatePower();
           this.miner.consumeFuel();
@@ -114,11 +113,11 @@ export class MinerState {
 
       case MinerStateValues.Stopping: { 
         this.miner.stop();
-        clearInterval(this.handle);
         this.changeState(MinerStateValues.Stopped);
       } break;
       
       case MinerStateValues.Stopped: { 
+        clearInterval(this.handle);
         observer.complete()
       }
     }         

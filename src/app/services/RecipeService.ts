@@ -9,7 +9,8 @@ export class RecipeService {
   constructor(private logger: LoggerService) {}
 
   findRecipe(resourceType: ResourceType): Recipe {
-    return RecipeMap[resourceType];
+    const recipe =  RecipeMap[resourceType];
+    return recipe
   }
 
   findMiningRecipe(resourceType: ResourceType): any {

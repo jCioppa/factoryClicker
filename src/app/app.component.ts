@@ -9,7 +9,8 @@ import { AppService } from './app.service';
 
 export class AppComponent  { 
   public title: string = ''
-  
+  renderLogger: boolean = false;
+
   constructor(private appService: AppService) {
     const appData = appService.appData();
     const title = appData.title;

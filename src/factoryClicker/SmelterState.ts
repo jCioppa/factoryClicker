@@ -109,11 +109,11 @@ export class SmelterState {
 
       case SmelterStateValues.Stopping: { 
         this.smelter.stop();
-        clearInterval(this.handle);
         this.changeState(SmelterStateValues.Stopped);
       } break;
       
       case SmelterStateValues.Stopped: { 
+        clearInterval(this.handle);
         observer.complete()
       }
     }         

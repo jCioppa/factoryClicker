@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Resource Select</h2>
+<mat-dialog-content class="mat-typography">
+    <div class = "resource-select-content">
+        <div *ngFor = "let slot of slots" class = "resource-select-slot" >
+            <div class = "resource-select-slot-content">
+              <span>{{slot.resourceType}}</span>
+              <button (click) = "onInventorySlotClicked(slot.resourceType)">+</button>
+            </div>
+        </div>
+      </div>    
+</mat-dialog-content>

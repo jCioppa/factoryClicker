@@ -1,27 +1,22 @@
 export enum ResourceType {
-  None,
+  None = "None",
 
   // raw resources
-  Coal,
-  IronOre,
-  CopperOre,
-  Stone,
+  Coal = "Coal",
+  IronOre = "IronOre",
+  CopperOre = "CopperOre",
+  Stone = "Stone",
 
   // secondary resources
-  Iron,
-  Copper,
-  StoneBricks,
+  Iron = "Iron",
+  Copper = "Copper",
+  StoneBricks = "StoneBricks",
 
   // tertiary resources
-  Steel,
-  IronGear,
-  CopperWire,
+  Steel = "Steel",
+  IronGear = "IronGear",
+  CopperWire = "CopperWire",
 
   // sciences
-  RedScience,
-  GreenScience,
-  BlueScience,
-  PurpleScience,
-  YellowScience,
-  SpaceScience,
+  RedScience = "RedScience",
 }

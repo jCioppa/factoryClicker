@@ -50,7 +50,7 @@ export class ResourceContainerComponent implements OnInit {
 
   onClickResource(): void {
     if (this.resourceType && this.inventory) { 
-      this.onClick.emit(this.resourceType);
+      this.onClick.emit(this.resourceType); 
       this.updateInventorySetting();
     }
   }
