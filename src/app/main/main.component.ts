@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from 'src/factoryClicker/Recipe';
+import { ResearchService } from 'src/factoryClicker/ResearchCenter';
 import { ResourceInventory } from 'src/factoryClicker/ResourceInventory';
 import {  ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from '../../factoryClicker/ResourceType';
@@ -57,6 +58,8 @@ export class MainComponent implements OnInit {
   ];
 
   public resourceInventory: ResourceInventory = new ResourceInventory()
+
+  researchService: ResearchService;
 
   public resourceTransferer: ResourceTransferManager =
     new ResourceTransferManager(this.resourceInventory);
@@ -161,6 +164,8 @@ export class MainComponent implements OnInit {
 
   constructor(private recipeService: RecipeService, private commandService: CommandService) {
     
+    this.researchService = new ResearchService();
+
     commandService.registerCommand('inventory', 'manages inventory', (option: string) => { 
 
       switch (option) { 

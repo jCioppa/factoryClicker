@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ResearchCenter } from 'src/factoryClicker/ResearchCenter';
+import { ResearchCenter, ResearchService } from 'src/factoryClicker/ResearchCenter';
 import { ResearchCompleteEvent, ResearchStateMachine } from 'src/factoryClicker/ResearchStateMachine';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { ResourceSelectionDialogComponent } from '../main/components/ResourceSelectionDialog/resource-selection-dialog.component';
-import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 export interface ResearchInput { 
   count: number;
@@ -29,32 +27,35 @@ export interface ResearchSlot {
 export class ResearchCenterComponent implements OnInit {
 
   @Input() resourceTransferer?: ResourceTransferManager; 
+  @Input() researchService?: ResearchService;
 
   selectionDialogOpen: boolean = false;
   resourceTypes = ResourceType;
-  lab: ResearchCenter = new ResearchCenter();
+  lab?: ResearchCenter;
   labState?: ResearchStateMachine;
 
-  constructor(public resourceSelectDialog: MatDialog) { 
-
+  constructor(public resourceSelectDialog: MatDialog) {
+    
   }
 
   tryStartResearching() { 
       const researchContext = { progressPerTick: 5.0}
       const ups = 10;
       const updateRate = 1000 / ups;
-      if (!this.labState) { 
+      if (!this.labState && this.lab) { 
         this.labState = new ResearchStateMachine(this.lab, updateRate, researchContext)
         const engine = this.labState.start();
         
         if (engine) {
-          engine.subscribe((event: ResearchCompleteEvent) => { 
-
-          })
+          engine.subscribe((event: ResearchCompleteEvent) => this.onResearchComplete(event))
         } else { 
-        
+
         }
       }
+  }
+
+  onResearchComplete(event: ResearchCompleteEvent){ 
+    
   }
 
   openResourceSelectionDialog(slot: ResearchSlot) { 
@@ -88,14 +89,19 @@ export class ResearchCenterComponent implements OnInit {
     if (!slot.active) { 
       this.openResourceSelectionDialog(slot)
     } else { 
-        const result = this.resourceTransferer?.getFromSource(slot.resourceType, 1)
-        if (result) { 
-          slot.count += result.count;
+      if (this.resourceTransferer) { 
+        const fetched: number = this.resourceTransferer.getResources(slot.resourceType, 1)
+        if (fetched > 0) { 
+          slot.count += fetched;
         }
+      }
     }
   }
 
   ngOnInit(): void {
-
+    if (!this.resourceTransferer || !this.researchService) { 
+      throw new Error('invalid params')
+    } 
+    this.lab = new ResearchCenter(this.resourceTransferer, this.researchService)
   }
 }

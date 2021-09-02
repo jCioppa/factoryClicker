@@ -24,9 +24,8 @@ export class ResearchStateMachine extends StateMachine<ResearchCompleteEvent, Re
   context: any = null;
 
   constructor(lab: ResearchCenter, updateRate: number, context: any) { 
-    super()
+    super(updateRate)
     this.lab = lab;
-    this.updateRate = updateRate
     this.context = context;
   }
 
@@ -41,17 +40,23 @@ export class ResearchStateMachine extends StateMachine<ResearchCompleteEvent, Re
   run(observer: any) { 
     switch(this.currentState) {
       case ResearchStateValues.Idle: { 
-      
+        if (this.lab?.ableToStartResearch()){ 
+          this.changeState(ResearchStateValues.Running)
+        }
       } break;
 
       case ResearchStateValues.Starting: {
-        this.lab?.startResearch();
+        this.changeState(ResearchStateValues.ResearchStarted)
+      } break;
+
+      case ResearchStateValues.Restarting: {
         this.changeState(ResearchStateValues.ResearchStarted)
       } break;
 
        // @NextState (Running)
       case ResearchStateValues.ResearchStarted: { 
         if (this.lab?.ableToStartResearch()){ 
+          this.lab?.initializeProgress();
           this.changeState(ResearchStateValues.Running)
         } else { 
           this.changeState(ResearchStateValues.Idle)
@@ -69,7 +74,12 @@ export class ResearchStateMachine extends StateMachine<ResearchCompleteEvent, Re
       // @NextState (Restarting | Stopping | RecipeComplete)
       case ResearchStateValues.RecipeComplete: { 
         observer.next({});
-        this.changeState(ResearchStateValues.Stopping)
+        this.lab?.onResearchComplete()
+        if (this.lab?.ableToStartResearch()){ 
+          this.changeState(ResearchStateValues.Restarting)
+        } else { 
+          this.changeState(ResearchStateValues.Stopping)
+        }
       } break;
 
       // @NextState (RecipeStarted)

@@ -49,8 +49,7 @@ export class MinerComponent implements OnInit {
     if (!this.miner.running) {
       
       const miningContext = {
-        progressPerTick: 0.1,
-        updateRate: 20
+        progressPerTick: 0.1
       }
 
       const ups = 60;
@@ -61,10 +60,14 @@ export class MinerComponent implements OnInit {
         const engine = this.state.start()
         if (engine) { 
           this.miner.running = true;
-          engine.subscribe((evt: MinerStateChange) => { })   
+          engine.subscribe((evt: MinerStateChange) => this.onMiningComplete(evt))   
         }
       }  
     }
+  }
+
+  onMiningComplete(event: MinerStateChange) { 
+
   }
 
   onRecipeSelectionChanged() {
@@ -77,16 +80,19 @@ export class MinerComponent implements OnInit {
   }
 
   transferCoal() {
-    if (this.resourceTransferer?.tryTransferResource(ResourceType.Coal, 1)) {
-      this.miner.addCoal(1)
-      this.startMiner();
+    if (this.resourceTransferer) {
+      const amountFetched = this.resourceTransferer.getResources(ResourceType.Coal, 1)
+      if (amountFetched > 0) { 
+        this.miner.addCoal(amountFetched)
+        this.startMiner();
+      }
     } 
   }
 
   transferOutput() {
     const {resourceType, count} = this.miner.getAllOutput();
     if (this.resourceTransferer) {
-      this.resourceTransferer.returnResource(resourceType, count);
+      this.resourceTransferer.pushResources(resourceType, count);
     }
   }
 

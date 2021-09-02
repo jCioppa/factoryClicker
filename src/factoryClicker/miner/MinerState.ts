@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 import { LoggerService } from "src/app/logger/logger.service";
 import { Miner } from "./Miner";
+import { StateMachine } from "./StateMachine";
 
 export interface MinerStateChange {
 
@@ -17,36 +18,25 @@ enum MinerStateValues {
   Idle = "Idle"
 }
 
-export class MinerState { 
+export class MinerState extends StateMachine<MinerStateChange, MinerStateValues> { 
   
-  engine?: Observable<MinerStateChange>;
-  handle?: any;
-  updateRate: number = 0;
-  currentState: MinerStateChange = MinerStateValues.Stopped;
   miner: Miner;
-  context: any = null;
   logger: LoggerService;
+  context: any;
 
   constructor(miner: Miner, updateRate: number, context: any, logger: LoggerService) { 
+    super(updateRate)
     this.miner = miner;
-    this.updateRate = updateRate
     this.context = context;
     this.logger = logger
   }
 
-  changeState(newState: MinerStateValues) { 
-    this.logger.log('MinerState', 'changeState', `${this.currentState} => ${newState}`)
-    this.currentState = newState;
+  start(): Observable<MinerStateChange> { 
+    return this.startInternal(MinerStateValues.Starting);
   }
 
-  start(): any { 
-    this.changeState(MinerStateValues.Starting);
-    if (!this.engine) { 
-      this.engine = new Observable<MinerStateChange>((observer: any) => { 
-        this.handle = setInterval(() => this.run(observer), this.updateRate)
-      })
-    }
-    return this.engine;
+  stop(): any { 
+    return this.stopInternal(MinerStateValues.Stopping);
   }
   
   run(observer: any) { 
@@ -96,7 +86,8 @@ export class MinerState {
       // @NextState (Restarting | Stopping)
       case MinerStateValues.RecipeComplete: { 
         if (this.miner.recipe) { 
-            // notify all listeners that the recipe is complete
+          
+          // notify all listeners that the recipe is complete
             observer.next(this.miner.recipe.output)     
           
             this.changeState(

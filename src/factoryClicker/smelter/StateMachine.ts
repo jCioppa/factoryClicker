@@ -6,8 +6,11 @@ export class StateMachine<EventType, StateType> {
     handle?: any;
     updateRate: number = 0;
     currentState?: StateType;
-    context: any = null;
   
+    constructor(updateRate: number) { 
+      this.updateRate = updateRate;
+    }
+
     changeState(newState: StateType) { 
       this.currentState = newState;
     }

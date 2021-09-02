@@ -1,53 +1,43 @@
 import { Observable } from "rxjs";
 import { Assembler } from "./Assembler";
 import { Recipe } from "./Recipe";
+import { StateMachine } from "./StateMachine";
 
 export interface AssemblerStateChange {
 
 }
 
 enum AssemblerStateValues { 
+  Idle,
+  Starting,
+  Restarting,
   RecipeStarted,
   Running, 
   RecipeComplete,
-  Restarting,
   Stopping, 
   Stopped,
-  Idle
 }
 
-interface IAssembler { 
-  recipe?: Recipe;
-  progress: number;
-  restart(): void;
-  hasCompletedRecipe(): boolean;
-  ableToBuildRecipe(recipe: Recipe): boolean;
-  stop(): void;
-}
-
-export class AssemblerState { 
+export class AssemblerState extends StateMachine<AssemblerStateChange, AssemblerStateValues> { 
   
-  engine?: Observable<AssemblerStateChange>;
-  handle?: any;
-  updateRate: number = 0;
-  currentState: AssemblerStateValues = AssemblerStateValues.Stopped;
   assembler: Assembler;
   context: any = null;
 
   constructor(assembler: Assembler, updateRate: number, context: any) { 
+    super(updateRate)
     this.assembler = assembler;
     this.updateRate = updateRate
     this.context = context;
   }
 
   start(): any { 
-    this.currentState = AssemblerStateValues.RecipeStarted;
-    this.engine = new Observable<AssemblerStateChange>((observer: any) => { 
-      this.handle = setInterval(() => this.run(observer), this.updateRate)
-    })
-    return this.engine;
+    return this.startInternal(AssemblerStateValues.Starting);
   }
   
+  stop() : void { 
+    this.stopInternal(AssemblerStateValues.Stopping);
+  }
+
   run(observer: any) { 
 
     switch(this.currentState) {

@@ -2,7 +2,8 @@ import {  Observable } from 'rxjs';
 import { AssemblerState } from './AssemblerState';
 import { Recipe } from './Recipe';
 import { ReceipeResult } from './RecipeResult';
-import { ResourceQuery } from './ResourceTransferManager';
+import { ResourceQuery, ResourceTransferManager } from './ResourceTransferManager';
+import { ResourceType } from './ResourceType';
 
 export class Assembler {
   
@@ -12,11 +13,11 @@ export class Assembler {
   state?: AssemblerState;
   requiredResourceStore: any = {}
  
-  addToStore(query: ResourceQuery) { 
-    if (!this.requiredResourceStore[query.resourceType]) {
-      this.requiredResourceStore[query.resourceType] = {count: 0}
+  addToStore(resourceType: ResourceType, count: number) { 
+    if (!this.requiredResourceStore[resourceType]) {
+      this.requiredResourceStore[resourceType] = {count: 0}
     }
-    this.requiredResourceStore[query.resourceType].count += query.count;
+    this.requiredResourceStore[resourceType].count += count;
   }
 
   initializeInventory(newRecipe: Recipe) { 

@@ -63,9 +63,9 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   }
 
   pushOutputToSource() { 
-    if (this.activeRecipe) { 
-      this.inventoryPipe?.returnResource(this.activeRecipe.output.resourceType, this.outputCount);
-      this.outputCount = 0;
+    if (this.activeRecipe && this.inventoryPipe) { 
+      const amountSent: number = this.inventoryPipe.pushResources(this.activeRecipe.output.resourceType, this.outputCount);
+      this.outputCount -= amountSent;
     }
   }
 
@@ -92,7 +92,6 @@ export class AssemblerComponent implements OnInit, OnDestroy {
     return result ?? 0;
   }
 
-
   startAssembler(): void {
     if (this.recipeSet &&  this.activeRecipe && this.inventoryPipe) {
       const observable = this.assembler.startAssembling(this.activeRecipe, this.loop);
@@ -103,7 +102,10 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   }
 
   getAssemblerState() { 
-    return this.assembler.state?.currentState.toString()
+    if (!this.assembler.state) { 
+      throw new Error('invalid assembler')
+    }
+    return this.assembler.state.currentState;
   }
 
   onRecipeComplete(result: ReceipeResult) { 
@@ -121,9 +123,13 @@ export class AssemblerComponent implements OnInit, OnDestroy {
   }
 
   transferRequiredResource(resourceType: ResourceType) {
-    const result: any = this.inventoryPipe?.getFromSource(resourceType, 1);
-    this.assembler.addToStore(result);
-    this.startAssembler()
+    if (this.inventoryPipe) { 
+      const amountFetched: number = this.inventoryPipe.getResources(resourceType, 1);
+      if (amountFetched > 0) { 
+        this.assembler.addToStore(resourceType, amountFetched);
+        this.startAssembler()
+      }
+    }
   }
 
   ngOnDestroy(): void {

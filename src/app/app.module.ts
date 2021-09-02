@@ -20,7 +20,7 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [...declarations, AppComponent, MinerComponent, LoginScreenComponent, ResearchCenterComponent],
+  declarations: [...declarations, AppComponent],
   imports : [...imports, 
     AppRoutingModule, 
     HttpClientModule,
@@ -34,7 +34,6 @@ export function tokenGetter() {
       },
     }),
     MatButtonModule
-
   ],
   providers: [...providers, AppService],
   bootstrap: [AppComponent],

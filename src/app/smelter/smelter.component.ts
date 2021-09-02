@@ -65,12 +65,14 @@ export class SmelterComponent implements OnInit {
         const engine = this.state.start()
         if (engine) { 
           this.smelter.running = true;
-          engine.subscribe((evt: SmelterStateChange) => { 
-
-          })   
+          engine.subscribe((evt: SmelterStateChange) => this.onSmeltingComplete(evt))   
         }
       }  
     }
+  }
+
+  onSmeltingComplete(event: SmelterStateChange): void { 
+
   }
 
   onRecipeSelectionChanged() {
@@ -84,16 +86,23 @@ export class SmelterComponent implements OnInit {
   }
 
   transferCoal() {
-    if (this.resourceTransferer?.tryTransferResource(ResourceType.Coal, 1)) {
-      this.smelter.addCoal(1)
-      this.startSmelter();
-    } 
+    if (this.resourceTransferer) { 
+      const amountFetched: number = this.resourceTransferer.getResources(ResourceType.Coal, 1)
+      if (amountFetched > 0) { 
+        this.smelter.addCoal(amountFetched)
+        this.startSmelter();
+      }
+    }
   }
 
   transferRequiredResource(resourceType: ResourceType) { 
-    const result: any = this.resourceTransferer?.getFromSource(resourceType, 1);
-    this.smelter.addToStore(result.resourceType, result.count);
-    this.startSmelter()  
+    if (this.resourceTransferer) { 
+      const amountFetched: number = this.resourceTransferer.getResources(resourceType, 1);
+      if (amountFetched > 0) { 
+        this.smelter.addToStore(resourceType, amountFetched);
+        this.startSmelter()  
+      }
+    }
   }
 
   initializeInventory(newRecipe: Recipe) { 
@@ -110,7 +119,7 @@ export class SmelterComponent implements OnInit {
   transferOutput() {
     const {resourceType, count} = this.smelter.getAllOutput();
     if (this.resourceTransferer) {
-      this.resourceTransferer.returnResource(resourceType, count);
+      const amountSent = this.resourceTransferer.pushResources(resourceType, count);
     }
   }
 

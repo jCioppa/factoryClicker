@@ -76,9 +76,9 @@ export class Smelter {
       this.logger = logger;
     }
   
-    updateProgress() { 
+    updateProgress(progress: number) { 
       if (this.recipe){
-        this.progress += 0.1;
+        this.progress += progress;
         this.normalizedProgress = (this.progress / this.recipe?.duration) * 100;
       }
     }

@@ -1,5 +1,5 @@
 import { LoggerService } from "src/app/logger/logger.service";
-import { Recipe } from "./Recipe";
+import { Recipe } from "../Recipe";
 
 export class Miner {
 
@@ -55,7 +55,7 @@ export class Miner {
         this.normalizedProgress = 0;
       }
     }
-  
+
     updatePower() { 
       if (this.recipe){
         this.power = Math.max(this.power - 0.05, 0)

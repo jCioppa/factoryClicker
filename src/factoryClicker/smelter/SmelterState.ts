@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 import { LoggerService } from "src/app/logger/logger.service";
 import { Smelter } from "./Smelter";
+import { StateMachine } from "./StateMachine";
 
 export interface SmelterStateChange {
 
@@ -17,36 +18,25 @@ enum SmelterStateValues {
   Idle = "Idle"
 }
 
-export class SmelterState { 
-  
-  engine?: Observable<SmelterStateChange>;
-  handle?: any;
-  updateRate: number = 0;
-  currentState: SmelterStateValues = SmelterStateValues.Stopped;
+export class SmelterState extends StateMachine<SmelterStateChange, SmelterStateValues> {
+
   smelter: Smelter;
-  context: any = null;
   logger: LoggerService;
+  context: any;
 
   constructor(miner: Smelter, updateRate: number, context: any, logger: LoggerService) { 
+    super(updateRate)
     this.smelter = miner;
     this.updateRate = updateRate
-    this.context = context;
     this.logger = logger
   }
 
-  changeState(newState: SmelterStateValues) { 
-    this.logger.log('MinerState', 'changeState', `${this.currentState} => ${newState}`)
-    this.currentState = newState;
+  start(): Observable<SmelterStateChange> { 
+    return this.startInternal(SmelterStateValues.Starting);
   }
 
-  start(): any { 
-    this.changeState(SmelterStateValues.Starting);
-    if (!this.engine) { 
-      this.engine = new Observable<SmelterStateChange>((observer: any) => { 
-        this.handle = setInterval(() => this.run(observer), this.updateRate)
-      })
-    }
-    return this.engine;
+  stop(): void { 
+    this.stopInternal(SmelterStateValues.Stopping);
   }
   
   run(observer: any) { 
@@ -77,15 +67,14 @@ export class SmelterState {
       case SmelterStateValues.Running: {         
         if (this.smelter.powerSource.empty()) {
           this.changeState(SmelterStateValues.Idle);
-        } else { 
-          this.smelter.updateProgress();
+        } else {
+          this.smelter.updateProgress(this.context.progressPerTick);
           this.smelter.updatePower();
-          this.smelter.consumeFuel();
-
+          this.smelter.consumeFuel(); 
           if (this.smelter.hasCompletedRecipe()) { 
             this.smelter.completeRecipe();
             this.changeState(SmelterStateValues.RecipeComplete)  
-          }
+          } 
         }
       } break;
 
@@ -97,9 +86,7 @@ export class SmelterState {
             this.smelter.ableToBuildRecipe(this.smelter.recipe) ? 
               SmelterStateValues.Restarting : 
               SmelterStateValues.Stopping);
-        }
-
-      
+        } 
       } break;
 
       // @NextState (RecipeStarted)
@@ -116,6 +103,7 @@ export class SmelterState {
         clearInterval(this.handle);
         observer.complete()
       }
+
     }         
   }
 }

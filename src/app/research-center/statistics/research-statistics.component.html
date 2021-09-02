@@ -1,0 +1,9 @@
+<div class = "research-stats-container">
+    <div class = "research-resource-stat" *ngIf = "researchService && researchService.researchLevels">
+        <div *ngFor = "let block of this.researchService.researchLevels">            
+            <span>{{block.resourceType}}</span>
+            <mat-progress-bar class = 'research-resource-progress' mode="determinate" [value]="100 * (block.experience / block.experienceToNextLevel)"></mat-progress-bar>
+            <span>[lvl {{block.currentLevel}}]</span>
+        </div>
+    </div>
+</div>

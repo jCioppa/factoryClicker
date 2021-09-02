@@ -17,25 +17,14 @@ export class ResourceTransferManager {
     this.resourceContainer = resourceContainer;
   }
 
-  tryTransferResource(resourceType: ResourceType, amount: number): boolean {
-    if (this.resourceContainer.ableToRemove(resourceType, amount)) { 
-      this.resourceContainer.remove(resourceType, amount);
-      return true;
-    }    
-    return false;
-  }
-
-  returnResource(resourceType: ResourceType, amount: number): number {
+  // returns resources to the source. Returns the number added. 
+  pushResources(resourceType: ResourceType, amount: number): number { 
     const result = this.resourceContainer.add(resourceType, amount);
     return result.added;
   }
 
-  getFromSource(resourceType: ResourceType, amount: number): ResourceQuery { 
+  getResources(resourceType: ResourceType, amount: number): number { 
     const amountFetched = this.resourceContainer.remove(resourceType, amount);
-    return resourceQuery(resourceType, amountFetched);
-  }
-
-  sendToSource(result: ReceipeResult): number {
-    return this.returnResource(result.resourceType, result.count)
+    return amountFetched;
   }
 }
