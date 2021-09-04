@@ -7,14 +7,14 @@ export interface AssemblerStateChange {
 }
 
 enum AssemblerStateValues { 
-  Idle,
-  Starting,
-  Restarting,
-  RecipeStarted,
-  Running, 
-  RecipeComplete,
-  Stopping, 
-  Stopped,
+  Idle = "Idle",
+  Starting = "Starting",
+  Restarting = "Restarting",
+  RecipeStarted = "RecipeStarted",
+  Running = "Running",
+  RecipeComplete = "RecipeComplete",
+  Stopping = "Stopping", 
+  Stopped = "Stopped",
 }
 
 export class AssemblerState extends StateMachine<AssemblerStateChange, AssemblerStateValues> { 
@@ -74,6 +74,10 @@ export class AssemblerState extends StateMachine<AssemblerStateChange, Assembler
                 AssemblerStateValues.Restarting : 
                 AssemblerStateValues.Stopping;
           }
+      } break;
+
+      case AssemblerStateValues.Starting: { 
+        this.changeState(AssemblerStateValues.RecipeStarted)
       } break;
 
       // @NextState (RecipeStarted)

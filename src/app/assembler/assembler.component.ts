@@ -22,7 +22,7 @@ interface RecipeOptionInfo {
 export class AssemblerComponent implements OnInit, OnDestroy {
   @Input() inventoryPipe?: ResourceTransferManager;
 
-  debug: boolean = false;
+  debug: boolean = true;
   assembler: Assembler = new Assembler();
   activeRecipe?: Recipe;
   selectedOption?: ResourceType;

@@ -58,8 +58,6 @@ export class MainComponent implements OnInit {
   public resource = ResourceType;
   public currentOption: ResourceType = ResourceType.None;
 
-  availableAssemblers: Array<any> = [1, 2, 3];
-
   researchCenters: Array<any> = [1,2,3,4,5,6]
 
   smelterDropdownOptions: Array<any> = [

@@ -16,11 +16,7 @@
             </mat-tab>
 
             <mat-tab label="Construction"> 
-                <div class = "container-vert">   
-                    <Assembler *ngFor="let assembler of availableAssemblers"
-                        [inventoryPipe] = "this.resourceTransferer"
-                    ></Assembler>                  
-                </div>     
+                <AssemblerTab [resourceTransferer] = "this.resourceTransferer"></AssemblerTab> 
             </mat-tab>
 
             <mat-tab label="R&D">

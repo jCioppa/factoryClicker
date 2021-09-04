@@ -1,0 +1,5 @@
+<div class = "container-vert">   
+    <Assembler *ngFor="let assembler of availableAssemblers"
+        [inventoryPipe] = "this.resourceTransferer"
+    ></Assembler>                  
+</div>    
