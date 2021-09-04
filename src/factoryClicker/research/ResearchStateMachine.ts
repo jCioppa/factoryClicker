@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
+import { StateMachine } from "../smelter/StateMachine";
 import { ResearchCenter } from "./ResearchCenter";
-import { StateMachine } from "./StateMachine";
 
 export interface ResearchCompleteEvent {
 

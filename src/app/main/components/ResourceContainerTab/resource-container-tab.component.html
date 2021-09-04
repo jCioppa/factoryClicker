@@ -1,0 +1,33 @@
+<div class = "resource-containers container-vert">
+
+    <div class = "resource-container-debug" *ngIf = "debug">
+        <div>
+            <label>UPS: </label>
+            <input [(ngModel)] = "stateContext.targetUps">
+        </div>
+        
+        <div>
+            <label>PPT: </label>
+            <input [(ngModel)] = "stateContext.progressPerTick">
+        </div>
+
+        <div>
+            <label>active: </label>
+            <span>{{state.active}}</span>
+        </div>
+
+        <div>
+            <label>state: </label>
+            <span>{{state.currentState}}</span>
+        </div>
+    </div>
+
+    <ResourceContainer *ngFor="let r of resourceContainers"
+        (onClick) = "onClickResource($event)"
+        [resourceType] = "r.resourceType"
+        [displayName] = "r.displayName"
+        [inventory] = "resourceInventory"
+        [progress] = "r.progress"
+    ></ResourceContainer>
+
+</div>

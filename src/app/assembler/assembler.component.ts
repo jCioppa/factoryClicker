@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Assembler } from 'src/factoryClicker/Assembler';
+import { Assembler } from 'src/factoryClicker/assembler/Assembler';
 import { Recipe } from 'src/factoryClicker/Recipe';
 import { ReceipeResult } from 'src/factoryClicker/RecipeResult';
-import {  ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
-import { ResourceType } from '../../factoryClicker/ResourceType';
+import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { LoggerService } from '../logger/logger.service';
 import { CommandService } from '../services/CommandService';
 import { RecipeService } from '../services/RecipeService';

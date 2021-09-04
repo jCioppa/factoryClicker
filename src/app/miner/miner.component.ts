@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {  MinerState, MinerStateChange } from 'src/factoryClicker/MinerState';
+import { Miner } from 'src/factoryClicker/miner/Miner';
+import {  MinerState, MinerStateChange } from 'src/factoryClicker/miner/MinerState';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { LoggerService } from '../logger/logger.service';
 import { RecipeService } from '../services/RecipeService';
-import { Miner } from 'src/factoryClicker/Miner';
 
 @Component({
   selector: 'Miner',
@@ -17,7 +17,7 @@ export class MinerComponent implements OnInit {
   currentSelection: ResourceType = ResourceType.None;
   loop: boolean = true;
   miner: Miner;
-  displayDebug: boolean = false;
+  displayDebug: boolean = true;
   state?: MinerState;
   dropdownOptions: Array<any> = [
     {

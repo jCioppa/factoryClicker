@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ResearchCenter, ResearchService } from 'src/factoryClicker/ResearchCenter';
-import { ResearchCompleteEvent, ResearchStateMachine } from 'src/factoryClicker/ResearchStateMachine';
+import { ResearchCenter } from 'src/factoryClicker/research/ResearchCenter';
+import { ResearchCompleteEvent, ResearchStateMachine } from 'src/factoryClicker/research/ResearchStateMachine';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { ResourceSelectionDialogComponent } from '../main/components/ResourceSelectionDialog/resource-selection-dialog.component';
+import { ResearchService } from '../services/ResearchService';
 
 export interface ResearchInput { 
   count: number;
@@ -12,11 +13,33 @@ export interface ResearchInput {
   type: ResourceType;
 }
 
-export interface ResearchSlot { 
+export class ResearchSlot { 
   active: boolean;
   count: number;
   max: number;
   resourceType: ResourceType;
+
+  constructor(count: number, max: number) { 
+   this.active = false;
+   this.count = count;
+   this.max = max;
+   this.resourceType = ResourceType.None;
+  }
+
+  activate(resourceType: ResourceType) { 
+    this.active = true;
+    this.resourceType = resourceType;
+  }
+
+  add(count: number): number {
+    let amountToAdd = count;
+    const newCount = this.count + count;
+    if (newCount > this.max) { 
+        amountToAdd = this.max - this.count;
+    }
+    this.count += amountToAdd;
+    return amountToAdd;
+  }
 }
 
 @Component({
@@ -27,23 +50,28 @@ export interface ResearchSlot {
 export class ResearchCenterComponent implements OnInit {
 
   @Input() resourceTransferer?: ResourceTransferManager; 
-  @Input() researchService?: ResearchService;
 
-  selectionDialogOpen: boolean = false;
   resourceTypes = ResourceType;
   lab?: ResearchCenter;
   labState?: ResearchStateMachine;
-
-  constructor(public resourceSelectDialog: MatDialog) {
+  
+  constructor(
+    private researchService: ResearchService, 
+    private resourceSelectDialog: MatDialog) {
     
+  }
+  
+  debug: boolean = true;
+
+  researchContext: any = {
+    progressPerTick: 0.1,
+    updatesPerSecond: 10
   }
 
   tryStartResearching() { 
-      const researchContext = { progressPerTick: 5.0}
-      const ups = 10;
-      const updateRate = 1000 / ups;
+      const updateRate = 1000 / this.researchContext.updatesPerSecond;
       if (!this.labState && this.lab) { 
-        this.labState = new ResearchStateMachine(this.lab, updateRate, researchContext)
+        this.labState = new ResearchStateMachine(this.lab, updateRate, this.researchContext)
         const engine = this.labState.start();
         
         if (engine) {
@@ -66,7 +94,6 @@ export class ResearchCenterComponent implements OnInit {
       dialogRef.componentInstance.setupInventory(this.resourceTransferer.resourceContainer);
     
       dialogRef.afterOpened().subscribe(() => { 
-         this.selectionDialogOpen = true;
           dialogRef.componentInstance.registerOnSelectCallback((data: any) => {
              if (data && data.resourceType) { 
                 if (slot) { 
@@ -79,9 +106,7 @@ export class ResearchCenterComponent implements OnInit {
           })
       }) 
   
-      dialogRef.afterClosed().subscribe(result => {
-        this.selectionDialogOpen = false;
-      });
+      dialogRef.afterClosed().subscribe(result => {});
     }
   }
 

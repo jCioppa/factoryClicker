@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { LoggerService } from "src/app/logger/logger.service";
+import { StateMachine } from "../smelter/StateMachine";
 import { Miner } from "./Miner";
-import { StateMachine } from "./StateMachine";
 
 export interface MinerStateChange {
 

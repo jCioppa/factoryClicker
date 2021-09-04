@@ -9,6 +9,7 @@ import { ResearchStatisticsComponent } from './research-center/statistics/resear
 import { MinerComponent } from './miner/miner.component';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { ResearchCenterComponent } from './research-center/research-center.component';
+import { ResourceContainerTabComponent } from './main/components/ResourceContainerTab/resource-container-tab.component';
 
 export const declarations = [
   LoggerComponent,
@@ -21,5 +22,6 @@ export const declarations = [
   ResearchStatisticsComponent, 
   MinerComponent, 
   LoginScreenComponent, 
-  ResearchCenterComponent
+  ResearchCenterComponent, 
+  ResourceContainerTabComponent
 ];

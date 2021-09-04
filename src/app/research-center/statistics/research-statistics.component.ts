@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ResearchService } from 'src/factoryClicker/ResearchCenter';
+import { ResearchService } from 'src/app/services/ResearchService';
 
 @Component({
   selector: 'ResearchStatistics',
@@ -7,10 +7,12 @@ import { ResearchService } from 'src/factoryClicker/ResearchCenter';
   styleUrls: ['./research-statistics.component.sass']
 })
 export class ResearchStatisticsComponent implements OnInit {
-    @Input() researchService?: ResearchService;
+
+    constructor(public researchService: ResearchService) { 
+      
+    }
+
     ngOnInit(): void {
-      if (!this.researchService) { 
-        throw new Error("invalid params")
-      }
+     
     }
 }

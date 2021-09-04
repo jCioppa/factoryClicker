@@ -638,7 +638,7 @@ input.mat-input-element {
     z-index: 1000;
     pointer-events: auto;
     -webkit-tap-highlight-color: transparent;
-    transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: opacity 20ms cubic-bezier(0.25, 0.8, 0.25, 1);
     opacity: 0
 }
 
@@ -926,7 +926,7 @@ textarea.cdk-textarea-autosize-measuring-firefox {
     text-align: center;
     display: inline-block;
     border-radius: 50%;
-    transition: transform 200ms ease-in-out;
+    transition: transform 20ms ease-in-out;
     transform: scale(0.6);
     overflow: hidden;
     white-space: nowrap;
@@ -2018,6 +2018,8 @@ mat-row,mat-header-row,mat-footer-row,th.mat-header-cell,td.mat-cell,td.mat-foot
     min-height: 56px
 }
 
+
+
 .mat-progress-bar-background {
     fill: black
 }
@@ -2654,4 +2656,8 @@ mat-row,mat-header-row,mat-footer-row,th.mat-header-cell,td.mat-cell,td.mat-foot
 
 .mat-simple-snackbar-action {
     color: inherit
+}
+
+.mat-progress-bar, .mat-progress-bar-fill { 
+    transition: transform 20ms ease!important;
 }

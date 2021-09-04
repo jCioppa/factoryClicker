@@ -13,5 +13,11 @@
                 <div *ngIf = "!slot.active">+</div>
             </button>
         </div>
+       
+    </div>
+
+    <div class = "research-debug" *ngIf = "debug">
+        <label>Progress/tick: </label><input [(ngModel)] = "researchContext.progressPerTick"> 
+       <label>Ticks/second: </label> <input [(ngModel)] = "researchContext.updatesPerSecond"> 
     </div>
 </div>

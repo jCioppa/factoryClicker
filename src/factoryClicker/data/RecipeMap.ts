@@ -74,6 +74,24 @@ export const AssemblerRecipes = [
 ];
 
 export const RecipeMap: any = {
+
+  [ResourceType.IronOre]: {
+    name: 'Iron Ore',
+    duration: 10,
+    output: resourceEntry(ResourceType.IronOre, 1),
+    requiredResources: [
+      
+    ],
+  },
+  [ResourceType.CopperOre]: {
+    name: 'Copper Ore',
+    duration: 10,
+    output: resourceEntry(ResourceType.CopperOre, 1),
+    requiredResources: [
+      
+    ],
+  },
+
   [ResourceType.Coal]: {
     name: 'Coal',
     duration: 10,
@@ -98,6 +116,15 @@ export const RecipeMap: any = {
     output: resourceEntry(ResourceType.Copper, 1),
     requiredResources: [
       resourceEntry(ResourceType.CopperOre, 1)
+    ],
+  },
+
+
+  [ResourceType.Stone]: {
+    name: 'Stone',
+    duration: 10,
+    output: resourceEntry(ResourceType.Stone, 1),
+    requiredResources: [
     ],
   },
 

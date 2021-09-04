@@ -12,20 +12,18 @@ export class ResourceContainerComponent implements OnInit {
   @Input() public resourceType?: ResourceType;
   @Input() public displayName?: string;
   @Input() public inventory?: ResourceInventory;  
+  @Input() public progress: number = 0;
   @Output() onClick = new EventEmitter<ResourceType>();
 
   imageSource: string = ''
-  normalizedProgress: number = 0;
   resourceCount: number = 0;
   resourceLimit: number = 0;
-
   canClickResource: boolean = true;
 
   updateInventorySetting() { 
     if (this.resourceType && this.inventory) { 
       this.resourceCount = this.inventory?.resourceCount(this.resourceType);
       this.resourceLimit = this.inventory?.resourceLimit(this.resourceType);
-      this.normalizedProgress = (this.resourceCount / this.resourceLimit) * 100;
     }
   }
 
@@ -51,7 +49,6 @@ export class ResourceContainerComponent implements OnInit {
   onClickResource(): void {
     if (this.resourceType && this.inventory) { 
       this.onClick.emit(this.resourceType); 
-      this.updateInventorySetting();
     }
   }
 }

@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Recipe } from 'src/factoryClicker/Recipe';
 import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
 import { ResourceType } from 'src/factoryClicker/ResourceType';
-import { Smelter } from 'src/factoryClicker/Smelter';
-import { SmelterState, SmelterStateChange } from 'src/factoryClicker/SmelterState';
+import { Smelter } from 'src/factoryClicker/smelter/Smelter';
+import { SmelterState, SmelterStateChange } from 'src/factoryClicker/smelter/SmelterState';
 import { LoggerService } from '../logger/logger.service';
 import { RecipeService } from '../services/RecipeService';
 

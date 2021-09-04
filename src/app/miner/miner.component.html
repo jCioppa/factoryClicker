@@ -35,7 +35,7 @@
         <mat-progress-bar class = 'miner-power-progress-bar' mode="determinate" [value]="miner.normalizedPower"></mat-progress-bar>
     </div>
 
-    <div  class = "debug" *ngIf = "displayDebug && miner && miner.recipe && state">
+    <div  class = "miner-container-debug" *ngIf = "displayDebug && miner && miner.recipe && state">
         <div>running: {{miner.running}}</div>
         <div>progress: {{miner.progress}} / {{miner.recipe.duration}} [{{miner.normalizedProgress}}]</div>
         <div>power: {{miner.power}} / {{miner.maxPower}} [{{miner.normalizedPower}}]</div>

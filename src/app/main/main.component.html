@@ -1,20 +1,12 @@
 <div class = 'container-hor'>
-    <div class = "resource-containers container-vert">
-        <ResourceContainer *ngFor="let r of resourceContainers"
-            (onClick) = "onClickResource($event)"
-            [resourceType] = "r.resourceType"
-            [displayName] = "r.displayName"
-            [inventory] = "resourceInventory"
-        ></ResourceContainer>
-    </div>
-    
+
+    <ResourceContainerTab 
+        [resourceInventory] = "resourceInventory"></ResourceContainerTab>
+
     <div class = "factory-root">
-          
-        <div class = "progress_bar">
-            <mat-progress-bar mode="determinate" [value]="100 * (clickCount / expToNextLevel)"></mat-progress-bar>
-        </div>
 
         <mat-tab-group>
+            
             <mat-tab label="Mining">
                 <div class = "container-vert">
                     <div *ngFor="let miner of miners">
@@ -33,6 +25,7 @@
                     ></Smelter>
                 </div>
             </mat-tab>
+
             <mat-tab label="Construction"> 
                 <div class = "container-vert">   
                     <Assembler *ngFor="let assembler of availableAssemblers"
@@ -44,16 +37,16 @@
             <mat-tab label="R&D">
                 <div class = "research-container">   
                     <div class = "research-stat-section">
-                        <ResearchStatistics [researchService] = "researchService"></ResearchStatistics>
+                        <ResearchStatistics></ResearchStatistics>
                     </div>
                     <div class = "research-resource-section">
                         <ResourceCenter *ngFor="let r of researchCenters"
                             [resourceTransferer] = "this.resourceTransferer"
-                            [researchService] = "this.researchService"
                         ></ResourceCenter>                  
                     </div>
                 </div>
             </mat-tab>
+
         </mat-tab-group>
     </div>
 </div>

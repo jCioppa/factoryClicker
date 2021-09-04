@@ -41,7 +41,7 @@
         <mat-progress-bar class = 'smelter-power-progress-bar' mode="determinate" [value]="smelter.powerSource.normalizedPower"></mat-progress-bar>
     </div>
 
-    <div  class = "debug" *ngIf = "displayDebug && smelter && smelter.recipe && state">
+    <div  class = "smelter-debug" *ngIf = "displayDebug && smelter && smelter.recipe && state">
         <div>running: {{smelter.running}}</div>
         <div>progress: {{smelter.progress}} / {{smelter.recipe.duration}} [{{smelter.normalizedProgress}}]</div>
         <div>power: {{smelter.powerSource.currentPower}} / {{smelter.powerSource.maxPower}} [{{smelter.powerSource.normalizedPower}}]</div>

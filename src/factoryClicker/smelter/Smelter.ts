@@ -1,6 +1,7 @@
 import { LoggerService } from "src/app/logger/logger.service";
-import { Recipe } from "./Recipe";
-import { ResourceType } from "./ResourceType";
+import { Recipe } from "../Recipe";
+import { ResourceType } from "../ResourceType";
+
 
 class CoalBuffer { 
   count: number;

@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 
 export class AppComponent  { 
   public title: string = ''
-  renderLogger: boolean = false;
+  renderLogger: boolean = true;
 
   constructor(private appService: AppService) {
     const appData = appService.appData();

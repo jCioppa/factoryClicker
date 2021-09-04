@@ -1,9 +1,8 @@
-import {  Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Recipe } from '../Recipe';
+import { ReceipeResult } from '../RecipeResult';
+import { ResourceType } from '../ResourceType';
 import { AssemblerState } from './AssemblerState';
-import { Recipe } from './Recipe';
-import { ReceipeResult } from './RecipeResult';
-import { ResourceQuery, ResourceTransferManager } from './ResourceTransferManager';
-import { ResourceType } from './ResourceType';
 
 export class Assembler {
   
@@ -44,10 +43,11 @@ export class Assembler {
   startAssembling(newRecipe: Recipe, shouldLoop: boolean): Observable<ReceipeResult> | null { 
     if (!this.isRunning() && this.ableToBuildRecipe(newRecipe)) {
       this.recipe = newRecipe;
-      this.state = new AssemblerState(this, 10, {
-          progressPerTick: 0.1,
-          updateRate: 20
-        });
+      const context = {
+        progressPerTick: 0.1,
+        updateRate: 20
+      }
+      this.state = new AssemblerState(this, 10, context);
       return this.state.start()
     }
     return null

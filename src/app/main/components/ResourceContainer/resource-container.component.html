@@ -4,10 +4,10 @@
             <span>{{displayName}}: {{resourceCount}} / {{resourceLimit}}</span>
         </div>    
         <div class = "resource-amount-display">
-            <mat-progress-bar class = 'resource-progress' mode="determinate" [value]="normalizedProgress"></mat-progress-bar>
+            <mat-progress-bar class = 'resource-progress' mode="determinate" [value]="progress"></mat-progress-bar>
         </div>
     </div>
     <div class = "resource-container-right">
-        <button (click) = "onClickResource()" [disabled] = "!canClickResource"><img class = "click-image" [src]="imageSource"></button>
+        <button (click) = "onClickResource()" [disabled] = "progress > 0"><img class = "click-image" [src]="imageSource"></button>
     </div>
 </div>

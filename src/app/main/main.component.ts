@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from 'src/factoryClicker/Recipe';
-import { ResearchService } from 'src/factoryClicker/ResearchCenter';
 import { ResourceInventory } from 'src/factoryClicker/ResourceInventory';
-import {  ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
-import { ResourceType } from '../../factoryClicker/ResourceType';
+import { ResourceTransferManager } from 'src/factoryClicker/ResourceTransferManager';
+import { ResourceType } from 'src/factoryClicker/ResourceType';
 import { CommandService } from '../services/CommandService';
 import { RecipeService } from '../services/RecipeService';
 
@@ -13,10 +12,40 @@ interface RecipeOptionInfo {
   name: string;
 }
 
+interface AssemblerInfo { 
 
-const min = (a:number, b:number):number => { 
-  return (a <= b) ? a : b;
 }
+
+const availableAssemblerInfo = {
+  numAssemblers: 3,
+  assemblerInfos: []
+}
+
+interface SmelterInfo {}
+
+const availableSmelterInfo = {
+  numSmelters: 3,
+  smelterInfos: []
+}
+
+interface MinerInfo { 
+
+}
+
+const availableMinersInfo = {
+  numMiners: 3,
+  minerInfos: []
+}
+
+interface ResearchLabInfo { 
+
+}
+
+const availableResearchLabInfo = {
+  numLabs: 3,
+  labInfos: []
+}
+
 
 @Component({
   selector: 'Main',
@@ -24,10 +53,8 @@ const min = (a:number, b:number):number => {
   styleUrls: ['./main.component.sass'],
 })
 export class MainComponent implements OnInit {
-  public clickCount: number = 0;
-  public expToNextLevel: number = 25;
-  public currentLevel: number = 0;
-  public increment: number = 1;
+
+  public debug: boolean = true;
   public resource = ResourceType;
   public currentOption: ResourceType = ResourceType.None;
 
@@ -57,12 +84,9 @@ export class MainComponent implements OnInit {
     },
   ];
 
-  public resourceInventory: ResourceInventory = new ResourceInventory()
+  public resourceInventory: ResourceInventory;
 
-  researchService: ResearchService;
-
-  public resourceTransferer: ResourceTransferManager =
-    new ResourceTransferManager(this.resourceInventory);
+  public resourceTransferer: ResourceTransferManager
 
   public assemblers: Array<any> = [{}, {}, {}];
 
@@ -89,141 +113,26 @@ export class MainComponent implements OnInit {
 
   public miners: Array<any> = [1, 2, 3];
 
-  public recipeOptions: Array<RecipeOptionInfo> = [
-    {
-      value: ResourceType.None,
-      name: 'None',
-    },
-
-    {
-      value: ResourceType.IronGear,
-      name: 'Iron Gears',
-    },
-
-    {
-      value: ResourceType.CopperWire,
-      name: 'Copper Wire',
-    },
-
-    {
-      value: ResourceType.RedScience,
-      name: 'Red Science',
-    },
-  ];
-
-  public resourceContainers: Array<any> = [
-    {
-      displayName: 'Iron Ore',
-      resourceType: ResourceType.IronOre,
-    },
-
-    {
-      displayName: 'Copper Ore',
-      resourceType: ResourceType.CopperOre,
-    },
-    {
-      displayName: 'Coal',
-      resourceType: ResourceType.Coal,
-    },
-
-    {
-      displayName: 'Stone',
-      resourceType: ResourceType.Stone,
-    },
-
-    {
-      displayName: 'Iron',
-      resourceType: ResourceType.Iron,
-    },
-
-    {
-      displayName: 'Steel',
-      resourceType: ResourceType.Steel,
-    },
-
-    {
-      displayName: 'Copper',
-      resourceType: ResourceType.Copper,
-    },
-
-    {
-      displayName: 'Copper Wire',
-      resourceType: ResourceType.CopperWire,
-    },
-
-    {
-      displayName: 'Iron Gear',
-      resourceType: ResourceType.IronGear,
-    },
-
-    {
-      displayName: 'Red Science',
-      resourceType: ResourceType.RedScience,
-    },
-  ];
-
-  constructor(private recipeService: RecipeService, private commandService: CommandService) {
+  constructor(private commandService: CommandService) {
     
-    this.researchService = new ResearchService();
+    this.resourceInventory = new ResourceInventory();
+    this.resourceTransferer = new ResourceTransferManager(this.resourceInventory);
 
     commandService.registerCommand('inventory', 'manages inventory', (option: string) => { 
-
       switch (option) { 
         case 'fill': { 
            this.resourceInventory.fill()
           break; 
         }        
         default: { 
-          
+        
         }
       }
    })
   }
 
   ngOnInit(): void {}
+  
   onSelectionChanged() {}
-
-  onClickResource(resourceType: ResourceType) {
-    let clickValid: boolean = true;
-    const recipe: Recipe = this.recipeService.findRecipe(resourceType);
-
-    if (recipe) {
-      if (this.ableToBuildRecipe(recipe)) {
-        this.buildRecipe(recipe);
-      } else {
-        clickValid = false;
-      }
-    } else {
-      this.resourceInventory.add(resourceType, this.increment)
-    }
-
-    if (clickValid) {
-      this.clickCount += this.increment;
-      if (this.clickCount >= this.expToNextLevel) {
-        this.currentLevel++;
-        this.clickCount = 0;
-        this.expToNextLevel *= 2.0;
-      }
-    }
-  }
-
-  ableToBuildRecipe(recipe: Recipe): boolean {
-    for (const requiredResource of recipe.requiredResources) {
-      if (!this.resourceInventory.ableToRemove(requiredResource.resourceType, requiredResource.count)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  buildRecipe(recipe: Recipe) {
-    if (this.resourceInventory.ableToAdd(recipe.output.resourceType, recipe.output.count)) {
-      for (const requiredResource of recipe.requiredResources) {
-        const requiredAmount = requiredResource.count;
-        const requiredResourceType = requiredResource.resourceType;
-        this.resourceInventory.remove(requiredResourceType, requiredAmount)
-      }
-      this.resourceInventory.add(recipe.output.resourceType, recipe.output.count)
-    }
-  }
+ 
 }

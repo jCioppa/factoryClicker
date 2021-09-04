@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
+import { StateMachine } from "../smelter/StateMachine";
 import { Assembler } from "./Assembler";
-import { Recipe } from "./Recipe";
-import { StateMachine } from "./StateMachine";
 
 export interface AssemblerStateChange {
 

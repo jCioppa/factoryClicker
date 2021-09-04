@@ -6,7 +6,8 @@ export class StateMachine<EventType, StateType> {
     handle?: any;
     updateRate: number = 0;
     currentState?: StateType;
-  
+    active: boolean = false;
+
     constructor(updateRate: number) { 
       this.updateRate = updateRate;
     }
