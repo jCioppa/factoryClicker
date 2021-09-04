@@ -20,16 +20,7 @@
             </mat-tab>
 
             <mat-tab label="R&D">
-                <div class = "research-container">   
-                    <div class = "research-stat-section">
-                        <ResearchStatistics></ResearchStatistics>
-                    </div>
-                    <div class = "research-resource-section">
-                        <ResourceCenter *ngFor="let r of researchCenters"
-                            [resourceTransferer] = "this.resourceTransferer"
-                        ></ResourceCenter>                  
-                    </div>
-                </div>
+                <ResearchTab [resourceTransferer] = "this.resourceTransferer"></ResearchTab>
             </mat-tab>
 
         </mat-tab-group>

@@ -9,6 +9,7 @@ import { ResourceType } from "src/factoryClicker/ResourceType";
 })
 export class SmeltingTabComponent implements OnInit {
 
+    debug: boolean = true;
     @Input() resourceTransferer?: ResourceTransferManager;
     public smelters: Array<any> = [
         {

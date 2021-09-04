@@ -13,6 +13,7 @@ import { ResourceContainerTabComponent } from './main/components/ResourceContain
 import { MiningTabComponent } from './main/components/MiningTab/mining-tab.component';
 import { SmeltingTabComponent } from './main/components/SmeltingTab/smelting-tab.component';
 import { AssemblerTabComponent } from './main/components/AssemblerTab/assembler-tab.component';
+import { ResearchTabComponent } from './main/components/ResearchTab/research-tab.component';
 
 export const declarations = [
   LoggerComponent,
@@ -29,5 +30,6 @@ export const declarations = [
   ResourceContainerTabComponent, 
   MiningTabComponent,
   SmeltingTabComponent,
-  AssemblerTabComponent
+  AssemblerTabComponent,
+  ResearchTabComponent
 ];

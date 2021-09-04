@@ -8,8 +8,8 @@ import { ResourceTransferManager } from "src/factoryClicker/ResourceTransferMana
 })
 export class AssemblerTabComponent implements OnInit {
 
+    debug: boolean = false;
     @Input() resourceTransferer?: ResourceTransferManager;
-
     availableAssemblers: Array<any> = [1, 2, 3];
     
     ngOnInit(): void {

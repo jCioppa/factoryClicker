@@ -1,4 +1,9 @@
 <div class = "container-vert">
+
+    <div class = "smelting-debug" *ngIf = "debug">
+        
+    </div>
+
     <Smelter *ngFor = "let smelter of smelters"
         [resourceTransferer] = "resourceTransferer"  
         displayName="smelter.selectedRecipe.displayName"     

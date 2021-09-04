@@ -1,0 +1,15 @@
+<div class = "research-container">   
+
+    <div class = "research-debug" *ngIf = "debug">
+        
+    </div>
+
+    <div class = "research-stat-section">
+        <ResearchStatistics></ResearchStatistics>
+    </div>
+    <div class = "research-resource-section">
+        <ResourceCenter *ngFor="let r of researchCenters"
+            [resourceTransferer] = "this.resourceTransferer"
+        ></ResourceCenter>                  
+    </div>
+</div>

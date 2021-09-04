@@ -46,7 +46,6 @@ const availableResearchLabInfo = {
   labInfos: []
 }
 
-
 @Component({
   selector: 'Main',
   templateUrl: './main.component.html',
@@ -56,37 +55,9 @@ export class MainComponent implements OnInit {
 
   public debug: boolean = true;
   public resource = ResourceType;
-  public currentOption: ResourceType = ResourceType.None;
-
-  researchCenters: Array<any> = [1,2,3,4,5,6]
-
-  smelterDropdownOptions: Array<any> = [
-    {
-      displayName: 'Iron ',
-      resourceType: ResourceType.Iron,
-    },
-
-    {
-      displayName: 'Copper ',
-      resourceType: ResourceType.Copper,
-    },
-
-    {
-      displayName: 'Stone Bricks',
-      resourceType: ResourceType.StoneBricks,
-    },
-
-    {
-      displayName: 'Steel',
-      resourceType: ResourceType.Steel,
-    },
-  ];
 
   public resourceInventory: ResourceInventory;
-
   public resourceTransferer: ResourceTransferManager
-
-  public assemblers: Array<any> = [{}, {}, {}];
 
   constructor(private commandService: CommandService) {
     
@@ -100,7 +71,7 @@ export class MainComponent implements OnInit {
           break; 
         }        
         default: { 
-        
+          
         }
       }
    })

@@ -1,4 +1,9 @@
-<div class = "container-vert">   
+<div class = "container-vert">  
+    
+    <div class = "assembler-debug" *ngIf = "debug">
+        
+    </div>
+
     <Assembler *ngFor="let assembler of availableAssemblers"
         [inventoryPipe] = "this.resourceTransferer"
     ></Assembler>                  
