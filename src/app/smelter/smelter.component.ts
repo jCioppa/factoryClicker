@@ -52,14 +52,14 @@ export class SmelterComponent implements OnInit {
   startSmelter() { 
     if (!this.smelter.running) {
 
-      const miningContext = {
+      const context = {
         progressPerTick: 0.1,
         updateRate: 20
       }
 
       const ups = 60;
       const updateRate = Math.floor(1000 / ups);
-      this.state = new SmelterState(this.smelter, updateRate, miningContext , this.logger);
+      this.state = new SmelterState(this.smelter, updateRate, context , this.logger);
       
       if (this.state) { 
         const engine = this.state.start()

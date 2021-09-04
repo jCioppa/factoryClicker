@@ -1,0 +1,7 @@
+<div class = "container-vert">
+    <div *ngFor="let miner of miners">
+       <Miner
+            [resourceTransferer] = "this.resourceTransferer"
+       ></Miner>
+    </div>
+</div>

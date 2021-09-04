@@ -29,6 +29,7 @@ export class SmelterState extends StateMachine<SmelterStateChange, SmelterStateV
     this.smelter = miner;
     this.updateRate = updateRate
     this.logger = logger
+    this.context = context;
   }
 
   start(): Observable<SmelterStateChange> { 

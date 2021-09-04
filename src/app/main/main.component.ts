@@ -90,29 +90,6 @@ export class MainComponent implements OnInit {
 
   public assemblers: Array<any> = [{}, {}, {}];
 
-  public smelters: Array<any> = [
-    {
-      selectedRecipe: {
-        resourceType: ResourceType.Iron,
-        displayName: 'Iron',
-      },
-    },
-    {
-      selectedRecipe: {
-        resourceType: ResourceType.Copper,
-        displayName: 'Copper',
-      },
-    },
-    {
-      selectedRecipe: {
-        resourceType: ResourceType.Steel,
-        displayName: 'Steel',
-      },
-    },
-  ];
-
-  public miners: Array<any> = [1, 2, 3];
-
   constructor(private commandService: CommandService) {
     
     this.resourceInventory = new ResourceInventory();

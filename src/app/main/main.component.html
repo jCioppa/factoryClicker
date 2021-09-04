@@ -8,22 +8,11 @@
         <mat-tab-group>
             
             <mat-tab label="Mining">
-                <div class = "container-vert">
-                    <div *ngFor="let miner of miners">
-                       <Miner
-                            [resourceTransferer] = "this.resourceTransferer"
-                       ></Miner>
-                    </div>
-                </div>
+                <MiningTab [resourceTransferer] = "this.resourceTransferer"></MiningTab>
             </mat-tab>        
          
             <mat-tab label="Refining">
-                <div class = "container-vert">
-                    <Smelter *ngFor = "let smelter of smelters"
-                        [resourceTransferer] = "resourceTransferer"  
-                        displayName="smelter.selectedRecipe.displayName"     
-                    ></Smelter>
-                </div>
+                <SmeltingTab [resourceTransferer] = "resourceTransferer" ></SmeltingTab>
             </mat-tab>
 
             <mat-tab label="Construction"> 
