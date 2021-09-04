@@ -69,7 +69,11 @@ export class MainComponent implements OnInit {
         case 'fill': { 
            this.resourceInventory.fill()
           break; 
-        }        
+        }      
+        case 'clear': { 
+          this.resourceInventory.clear()
+         break; 
+       }         
         default: { 
           
         }

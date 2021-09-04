@@ -32,16 +32,45 @@ export class ResourceInventory {
     [ResourceType.RedScience]:  resourceSlot(ResourceType.RedScience, 0, 50)
   };
   
+  resourceTypes : ResourceType[] = [
+    ResourceType.CopperOre,
+    ResourceType.Coal,
+    ResourceType.Copper,
+    ResourceType.CopperWire,
+    ResourceType.Iron,
+    ResourceType.IronGear,
+    ResourceType.IronOre,
+    ResourceType.RedScience,
+    ResourceType.Steel,
+    ResourceType.Stone,
+    ResourceType.StoneBricks,
+  ]
+
   fill() { 
-    for (const key in this.resourceInventoryContainer) { 
-      this.resourceInventoryContainer[key].count = this.resourceInventoryContainer[key].max;
+    this.foreachResource((resourceType: ResourceType) => { 
+      this.fillResource(resourceType)
+    })
+  }
+
+  clear() { 
+    this.foreachResource((resourceType: ResourceType) => { 
+      this.clearResource(resourceType)
+    })
+  }
+
+  fillResource(resourceType: ResourceType) { 
+    this.add(resourceType, 50)
+  }
+
+  foreachResource(callback: (type: ResourceType) => void) { 
+    for (const resourceType of this.resourceTypes) { 
+      callback(resourceType)
     }
   }
 
   ableToAdd(resourceType: ResourceType, count: number) : boolean {
     const amount = this.resourceCount(resourceType);
-    const limit = this.resourceLimit(resourceType);
-    
+    const limit = this.resourceLimit(resourceType); 
     if (amount + count <= limit) { 
       return true
     }
@@ -53,9 +82,10 @@ export class ResourceInventory {
   }
 
   add(resourceType: ResourceType, count: number): AddInventoryResult {       
+    let amountToAdd = count;
+
     const currentAmount = this.resourceCount(resourceType);
     const limit = this.resourceLimit(resourceType);
-    let amountToAdd = count;
 
     if (currentAmount + amountToAdd > limit) { 
       amountToAdd = limit - currentAmount;
@@ -81,6 +111,13 @@ export class ResourceInventory {
     return false;
   }
   
+  clearResource(resourceType: ResourceType) { 
+      const amount = this.resourceCount(resourceType);
+      if (amount > 0) { 
+        this.remove(resourceType, amount)
+      }
+  }
+
   remove(resourceType: ResourceType, count: number): number {       
     const currentAmount = this.resourceCount(resourceType);  
     let amountToRemove = count;
